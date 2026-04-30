@@ -16,6 +16,11 @@ export default function Home() {
         />
       </div>
 
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-[200px] backdrop-blur-[4px]"
+      />
+
       <div className="relative z-10 mx-auto flex min-h-screen max-w-[1440px] flex-col px-4 md:px-8">
         <nav className="flex items-center justify-between py-6">
           <span className="text-base font-semibold capitalize tracking-[-0.04em] text-black">
@@ -34,26 +39,26 @@ export default function Home() {
           </button>
         </nav>
 
-        <div className="flex flex-1 flex-col justify-end pb-6">
+        <div className="flex flex-1 flex-col justify-end pb-[4px] md:pb-[154px]">
           <div className="flex w-full flex-col items-center">
             <p className="self-center font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70 md:self-start md:pl-[18px]">
               [ Hello i&rsquo;m ]
             </p>
             <h1
               className="w-full text-center font-medium capitalize tracking-[-0.07em] text-[96px] leading-[0.8] md:whitespace-nowrap md:text-[clamp(72px,13.75vw,198px)] md:leading-[1.1]"
-              style={{ color: "rgba(255, 255, 255, 0.5)" }}
+              style={{
+                color: "rgba(255, 255, 255, 0.6)",
+                mixBlendMode: "overlay",
+                textShadow: "0 0 1.5px rgba(255,255,255,0.35)",
+                filter: "blur(0.4px)",
+              }}
             >
               Harvey&nbsp;&nbsp; Specter
             </h1>
           </div>
 
           <div className="relative mt-4 flex w-full justify-start md:justify-end">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-y-6 backdrop-blur-[4px]"
-              style={{ left: "-100vw", right: "-100vw" }}
-            />
-            <div className="relative flex w-[384px] flex-col items-start gap-4 pl-[90px] md:w-[294px] md:pl-0">
+            <div className="relative flex w-[452px] flex-col items-start gap-4 pl-[100px] md:w-[294px] md:pl-0">
               <p className="text-sm font-bold italic uppercase leading-[1.1] tracking-[-0.04em] text-[#1f1f1f]">
                 H.Studio is a{" "}
                 <span className="font-normal italic">full-service</span>{" "}
