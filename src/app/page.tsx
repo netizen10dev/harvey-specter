@@ -6,17 +6,19 @@ function PortfolioTile({
   title,
   image,
   heightClass,
+  className = "",
 }: {
   title: string;
   image: string;
   heightClass: string;
+  className?: string;
 }) {
   const pillClass =
     "rounded-3xl px-2 py-1 text-[14px] font-medium tracking-[-0.04em] text-[#111] backdrop-blur-[10px]";
   const pillStyle = { backgroundColor: "rgba(255, 255, 255, 0.3)" };
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className={`flex flex-col gap-2.5 ${className}`}>
       <div
         className={`relative flex flex-col items-start justify-end overflow-hidden pb-4 pl-4 ${heightClass}`}
       >
@@ -266,7 +268,7 @@ export default function Home() {
 
             <div className="flex items-start gap-6 whitespace-nowrap md:gap-12 md:pl-[42.08vw]">
               <span>of chicago.</span>
-              <span className="hidden self-start font-[family-name:var(--font-geist-mono)] text-sm font-normal normal-case tracking-normal leading-[1.1] text-[#1f1f1f] md:inline">
+              <span className="hidden self-start font-[family-name:var(--font-geist-mono)] text-sm font-normal normal-case tracking-normal leading-[1.1] text-[#1f1f1f] md:-ml-[110px] md:mt-[30px] md:inline">
                 [ creative freelancer ]
               </span>
             </div>
@@ -329,7 +331,7 @@ export default function Home() {
       </section>
 
       <section className="relative w-full bg-white">
-        <div className="aspect-[375/614] w-full overflow-hidden md:aspect-[1440/640]">
+        <div className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
             src="/photographer.jpg"
             alt=""
@@ -395,7 +397,7 @@ export default function Home() {
               [ portfolio ]
             </p>
 
-            <div className="flex items-start gap-2.5 whitespace-nowrap uppercase">
+            <div className="flex w-full items-start justify-between whitespace-nowrap uppercase md:w-auto md:justify-start md:gap-2.5">
               <h2 className="font-light tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:text-[clamp(48px,6.667vw,96px)]">
                 <span className="block">Selected</span>
                 <span className="block">Work</span>
@@ -424,13 +426,14 @@ export default function Home() {
                 title="Surfers paradise"
                 image="/work-surfers.jpg"
                 heightClass="h-[390px] md:h-[744px]"
+                className="md:mb-[50px]"
               />
               <PortfolioTile
                 title="Cyberpunk caffe"
                 image="/work-cyberpunk.jpg"
                 heightClass="h-[390px] md:h-[699px]"
               />
-              <div className="hidden md:block">
+              <div className="hidden md:mt-[50px] md:block">
                 <PortfolioCTA />
               </div>
             </div>
@@ -439,6 +442,7 @@ export default function Home() {
                 title="Agency 976"
                 image="/work-agency.jpg"
                 heightClass="h-[390px] md:h-[699px]"
+                className="md:mb-[50px]"
               />
               <PortfolioTile
                 title="Minimal Playground"
