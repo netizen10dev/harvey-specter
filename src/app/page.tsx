@@ -192,7 +192,7 @@ export default function Home() {
 
           <div className="flex flex-1 flex-col justify-end pb-[4px] md:pb-[154px]">
             <div className="flex w-full flex-col items-center">
-              <p className="self-center font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70 md:self-start md:pl-[18px]">
+              <p className="-translate-x-[25px] self-center font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70 md:translate-x-0 md:self-start md:pl-[18px]">
                 [ Hello i&rsquo;m ]
               </p>
               <h1
@@ -204,13 +204,13 @@ export default function Home() {
                   filter: "blur(0.4px)",
                 }}
               >
-                Harvey&nbsp;&nbsp; Specter
+                <span className="block md:inline">Harvey&nbsp;&nbsp;</span><span className="block -translate-x-[25px] md:inline md:translate-x-0">Specter</span>
               </h1>
             </div>
 
-            <div className="relative mt-4 flex w-full justify-start md:justify-end">
+            <div className="relative mt-4 flex w-full -translate-x-[40px] justify-start md:translate-x-0 md:justify-end">
               <div className="relative flex w-[452px] flex-col items-start gap-4 pl-[100px] md:w-[294px] md:pl-0">
-                <p className="text-sm font-bold italic uppercase leading-[1.1] tracking-[-0.04em] text-[#1f1f1f]">
+                <p className="pr-[60px] text-sm font-bold italic uppercase leading-[1.1] tracking-[-0.04em] text-[#1f1f1f] md:pr-0">
                   H.Studio is a{" "}
                   <span className="font-normal italic">full-service</span>{" "}
                   creative studio creating beautiful digital experiences and
@@ -234,13 +234,13 @@ export default function Home() {
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
           <div className="flex w-full flex-col items-end gap-3">
-            <p className="w-full text-right font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-[#1f1f1f]">
+            <p className="w-full pr-[10px] text-right font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-[#1f1f1f] md:pr-0">
               [ 8+ years in industry ]
             </p>
             <div className="h-px w-full bg-black" />
           </div>
 
-          <div className="flex w-full flex-col items-center gap-3 font-light uppercase tracking-[-0.08em] leading-[0.84] text-[32px] text-black md:items-start md:gap-2 md:text-[clamp(48px,6.667vw,96px)]">
+          <div className="mt-[20px] flex w-full flex-col items-center gap-3 font-light uppercase tracking-[-0.08em] leading-[0.84] text-[32px] text-black md:mt-0 md:items-start md:gap-2 md:text-[clamp(48px,6.667vw,96px)]">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal normal-case tracking-normal leading-[1.1] text-[#1f1f1f] md:hidden">
               001
             </p>
@@ -369,13 +369,13 @@ export default function Home() {
                     {item.title}
                   </h3>
 
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
+                  <div className="flex flex-row items-start gap-4 md:gap-6">
                     <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-white md:w-[393px]">
                       Placeholder description of this service. Explain the
                       value you provide and the outcomes clients can expect.
                       Keep it to two or three sentences.
                     </p>
-                    <div className="h-[151px] w-[151px] shrink-0 overflow-hidden">
+                    <div className="h-[100px] w-[100px] shrink-0 overflow-hidden md:h-[151px] md:w-[151px]">
                       <img
                         src={item.image}
                         alt=""
@@ -576,7 +576,7 @@ export default function Home() {
 
       <section className="relative w-full bg-[#f3f3f3] px-4 py-16 md:px-8 md:py-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <h2 className="font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden">
+          <h2 className="pr-[150px] font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden md:pr-0">
             Keep up with my latest news &amp; achievements
           </h2>
 
@@ -620,12 +620,12 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-1 text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:w-[298px] md:items-center md:text-center">
+              <div className="flex flex-col gap-[10px] text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:w-[298px] md:items-center md:text-center">
                 <p>Facebook</p>
                 <p>Instagram</p>
               </div>
 
-              <div className="flex flex-col gap-1 text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:w-[298px] md:items-end md:text-right">
+              <div className="-mt-[6px] flex flex-col gap-[10px] text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:mt-0 md:w-[298px] md:items-end md:text-right">
                 <p>x.com</p>
                 <p>Linkedin</p>
               </div>
