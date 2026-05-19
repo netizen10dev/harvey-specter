@@ -113,8 +113,8 @@ function TestimonialCard({
   author: string;
 }) {
   return (
-    <div className="flex w-[260px] shrink-0 flex-col items-start gap-4 rounded-[4px] border border-solid border-[#ddd] bg-[#f1f1f1] p-6 md:w-[353px]">
-      <img src={logo} alt="" className={`${logoClass} w-auto object-contain`} />
+    <div className="flex w-[260px] shrink-0 flex-col items-start gap-4 rounded-[6px] border border-solid border-black/5 bg-[#f5f4f0] p-6 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.18),0_4px_12px_-2px_rgba(0,0,0,0.08)] md:w-[353px]">
+      <img src={logo} alt="" className={`${logoClass} w-auto object-contain opacity-40`} />
       <p className="font-[family-name:var(--font-inter)] text-[18px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f]">
         {quote}
       </p>
@@ -460,14 +460,14 @@ export default function Home() {
 
       <section className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="relative mx-auto w-full max-w-[1440px]">
-          <h2 className="text-center font-medium capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.8] md:text-[clamp(80px,13.75vw,198px)] md:leading-[1.1]">
+          <h2 className="text-left font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
             Testimonials
           </h2>
 
           <div className="mt-8 -mx-4 flex gap-2 overflow-x-auto pb-4 px-4 md:hidden">
             <div className="shrink-0" style={{ transform: "rotate(-3.5deg)" }}>
               <TestimonialCard
-                logo="/logo-marko.png"
+                logo="/logo-marko.svg"
                 logoClass="h-[19px]"
                 quote="A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive."
                 author="Marko Stojković"
@@ -475,7 +475,7 @@ export default function Home() {
             </div>
             <div className="shrink-0" style={{ transform: "rotate(2deg)" }}>
               <TestimonialCard
-                logo="/logo-sofia.png"
+                logo="/logo-sofia.svg"
                 logoClass="h-9"
                 quote="An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats."
                 author="Sofia Martínez"
@@ -483,7 +483,7 @@ export default function Home() {
             </div>
             <div className="shrink-0" style={{ transform: "rotate(2.9deg)" }}>
               <TestimonialCard
-                logo="/logo-lukas.png"
+                logo="/logo-lukas.svg"
                 logoClass="h-[19px]"
                 quote="Professional, precise, and incredibly fast at handling complex product visualizations and templates."
                 author="Lukas Weber"
@@ -491,7 +491,7 @@ export default function Home() {
             </div>
             <div className="shrink-0" style={{ transform: "rotate(2.23deg)" }}>
               <TestimonialCard
-                logo="/logo-sarah.png"
+                logo="/logo-sarah.svg"
                 logoClass="h-[31px]"
                 quote="A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity."
                 author="Sarah Jenkins"
@@ -500,67 +500,76 @@ export default function Home() {
           </div>
 
           <div className="hidden md:block">
-            <div
-              className="absolute"
-              style={{
-                left: "7.08%",
-                top: "142px",
-                transform: "rotate(-6.85deg)",
-              }}
-            >
-              <TestimonialCard
-                logo="/logo-marko.png"
-                logoClass="h-[19px]"
-                quote="A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive."
-                author="Marko Stojković"
-              />
+            <div className="relative isolate mx-auto w-[1238px] max-w-full">
+              <h2
+                className="pointer-events-none absolute left-0 right-0 z-0 text-center font-medium capitalize tracking-[-0.07em] text-black md:text-[clamp(80px,13.75vw,198px)] md:leading-[1.1]"
+                style={{ top: "375px", transform: "translateY(-50%)" }}
+              >
+                Testimonials
+              </h2>
+              <div
+                className="absolute"
+                style={{
+                  left: "0px",
+                  top: "22px",
+                  transform: "rotate(-6.85deg)",
+                }}
+              >
+                <TestimonialCard
+                  logo="/logo-marko.svg"
+                  logoClass="h-[19px]"
+                  quote="A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive."
+                  author="Marko Stojković"
+                />
+              </div>
+              <div
+                className="absolute"
+                style={{
+                  left: "574px",
+                  top: "152px",
+                  transform: "rotate(2.9deg)",
+                  zIndex: -1,
+                }}
+              >
+                <TestimonialCard
+                  logo="/logo-lukas.svg"
+                  logoClass="h-[19px]"
+                  quote="Professional, precise, and incredibly fast at handling complex product visualizations and templates."
+                  author="Lukas Weber"
+                />
+              </div>
+              <div
+                className="absolute"
+                style={{
+                  left: "203px",
+                  top: "433px",
+                  transform: "rotate(2.23deg)",
+                }}
+              >
+                <TestimonialCard
+                  logo="/logo-sarah.svg"
+                  logoClass="h-[31px]"
+                  quote="A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity."
+                  author="Sarah Jenkins"
+                />
+              </div>
+              <div
+                className="absolute"
+                style={{
+                  left: "885px",
+                  top: "426px",
+                  transform: "rotate(-4.15deg)",
+                }}
+              >
+                <TestimonialCard
+                  logo="/logo-sofia.svg"
+                  logoClass="h-9"
+                  quote="An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats."
+                  author="Sofia Martínez"
+                />
+              </div>
+              <div className="h-[900px]" aria-hidden />
             </div>
-            <div
-              className="absolute"
-              style={{
-                left: "46.94%",
-                top: "272px",
-                transform: "rotate(2.9deg)",
-              }}
-            >
-              <TestimonialCard
-                logo="/logo-lukas.png"
-                logoClass="h-[19px]"
-                quote="Professional, precise, and incredibly fast at handling complex product visualizations and templates."
-                author="Lukas Weber"
-              />
-            </div>
-            <div
-              className="absolute"
-              style={{
-                left: "21.18%",
-                top: "553px",
-                transform: "rotate(2.23deg)",
-              }}
-            >
-              <TestimonialCard
-                logo="/logo-sarah.png"
-                logoClass="h-[31px]"
-                quote="A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity."
-                author="Sarah Jenkins"
-              />
-            </div>
-            <div
-              className="absolute"
-              style={{
-                left: "68.54%",
-                top: "546px",
-                transform: "rotate(-4.15deg)",
-              }}
-            >
-              <TestimonialCard
-                logo="/logo-sofia.png"
-                logoClass="h-9"
-                quote="An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats."
-                author="Sofia Martínez"
-              />
-            </div>
-            <div className="h-[900px]" aria-hidden />
           </div>
         </div>
       </section>
@@ -582,7 +591,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="-mx-4 flex gap-4 overflow-x-auto px-4 md:mx-0 md:w-[1020px] md:items-start md:gap-[31px] md:overflow-visible md:px-0">
+            <div className="-mx-4 flex gap-4 overflow-x-auto px-4 md:mx-0 md:ml-[270px] md:w-[1020px] md:items-start md:gap-[31px] md:overflow-visible md:px-0">
               <NewsCard image="/news-1.jpg" />
               <div className="hidden w-px self-stretch bg-black/30 md:block" />
               <NewsCard image="/news-2.jpg" topPad />
@@ -628,7 +637,7 @@ export default function Home() {
             <div className="relative h-[219px] w-[1093px] overflow-hidden">
               <div
                 className="absolute left-0 top-1/2 flex h-[160px] w-[15px] -translate-y-1/2 items-center justify-center"
-                style={{ top: "calc(50% - 75.5px)" }}
+                style={{ top: "calc(50% - 5.5px)" }}
               >
                 <div style={{ transform: "rotate(-90deg)" }}>
                   <p className="whitespace-nowrap font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">

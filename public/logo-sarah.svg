@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 38" fill="none">
+  <g fill="#1f1f1f">
+    <path d="M14 3 L24 7 V18 C24 25 19 30 14 33 C9 30 4 25 4 18 V7 Z" />
+  </g>
+  <g fill="#f5f4f0">
+    <path d="M14 11 L17 14 L14 17 L11 14 Z" />
+    <rect x="13" y="17" width="2" height="6" />
+  </g>
+  <text x="32" y="16" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#1f1f1f" letter-spacing="-0.4">Logoipsum</text>
+  <text x="32" y="30" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#1f1f1f" letter-spacing="2">UNIVERSITY</text>
+</svg>
