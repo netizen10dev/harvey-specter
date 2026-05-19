@@ -192,7 +192,7 @@ export default function Home() {
 
           <div className="flex flex-1 flex-col justify-end pb-[4px] md:pb-[154px]">
             <div className="flex w-full flex-col items-center">
-              <p className="-translate-x-[25px] self-center font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70 md:translate-x-0 md:self-start md:pl-[18px]">
+              <p className="-translate-x-[25px] self-center font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70 md:translate-x-0 md:self-start md:pl-[48px]">
                 [ Hello i&rsquo;m ]
               </p>
               <h1
