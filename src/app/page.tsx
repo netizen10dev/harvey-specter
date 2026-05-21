@@ -1,15 +1,69 @@
-"use client";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import MobileNav from "./_components/MobileNav";
 
-import { useState } from "react";
+// GROQ queries
+const SERVICES_QUERY = `*[_type == "service"] | order(order asc) { _id, title, description, image }`;
+const PROJECTS_QUERY = `*[_type == "portfolioProject"] | order(order asc)[0...4] { _id, title, image, tags }`;
+const TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(order asc)[0...4] { _id, author, quote, logo }`;
+const POSTS_QUERY = `*[_type == "post"] | order(publishedAt desc)[0...3] { _id, title, excerpt, mainImage }`;
+
+// Normalized types
+type ServiceItem = { _id: string; title: string; description: string; imageUrl: string };
+type ProjectItem = { _id: string; title: string; imageUrl: string; tags: string[] };
+type TestimonialItem = { _id: string; author: string; quote: string; logoUrl: string; logoClass: string };
+type PostItem = { _id: string; imageUrl: string; excerpt: string };
+
+// Fallback content so the site looks correct before Sanity content is added
+const FB_SERVICES: ServiceItem[] = [
+  { _id: "s1", title: "Brand Discovery", description: "Placeholder description of this service. Explain the value you provide and the outcomes clients can expect. Keep it to two or three sentences.", imageUrl: "/service-brand.jpg" },
+  { _id: "s2", title: "Web design & Dev", description: "Placeholder description of this service. Explain the value you provide and the outcomes clients can expect. Keep it to two or three sentences.", imageUrl: "/service-web.jpg" },
+  { _id: "s3", title: "Marketing", description: "Placeholder description of this service. Explain the value you provide and the outcomes clients can expect. Keep it to two or three sentences.", imageUrl: "/service-marketing.jpg" },
+  { _id: "s4", title: "Photography", description: "Placeholder description of this service. Explain the value you provide and the outcomes clients can expect. Keep it to two or three sentences.", imageUrl: "/service-photography.jpg" },
+];
+
+const FB_PROJECTS: ProjectItem[] = [
+  { _id: "p1", title: "Surfers paradise", imageUrl: "/work-surfers.jpg", tags: ["Social Media", "Photography"] },
+  { _id: "p2", title: "Cyberpunk caffe", imageUrl: "/work-cyberpunk.jpg", tags: ["Social Media", "Photography"] },
+  { _id: "p3", title: "Agency 976", imageUrl: "/work-agency.jpg", tags: ["Social Media", "Photography"] },
+  { _id: "p4", title: "Minimal Playground", imageUrl: "/work-minimal.jpg", tags: ["Social Media", "Photography"] },
+];
+
+const FB_TESTIMONIALS: TestimonialItem[] = [
+  { _id: "t1", author: "Marko Stojković", quote: "A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive.", logoUrl: "/logo-marko.svg", logoClass: "h-[19px]" },
+  { _id: "t2", author: "Sofia Martínez", quote: "An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats.", logoUrl: "/logo-sofia.svg", logoClass: "h-9" },
+  { _id: "t3", author: "Lukas Weber", quote: "Professional, precise, and incredibly fast at handling complex product visualizations and templates.", logoUrl: "/logo-lukas.svg", logoClass: "h-[19px]" },
+  { _id: "t4", author: "Sarah Jenkins", quote: "A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity.", logoUrl: "/logo-sarah.svg", logoClass: "h-[31px]" },
+];
+
+const FB_POSTS: PostItem[] = [
+  { _id: "n1", imageUrl: "/news-1.jpg", excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+  { _id: "n2", imageUrl: "/news-2.jpg", excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+  { _id: "n3", imageUrl: "/news-3.jpg", excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+];
+
+// Desktop testimonial card layout positions
+const TESTIMONIAL_POSITIONS = [
+  { left: "0px", top: "22px", rotate: "-6.85deg", zIndex: 0 },
+  { left: "574px", top: "152px", rotate: "2.9deg", zIndex: -1 },
+  { left: "203px", top: "433px", rotate: "2.23deg", zIndex: 0 },
+  { left: "885px", top: "426px", rotate: "-4.15deg", zIndex: 0 },
+];
+
+const MOBILE_ROTATIONS = ["-3.5deg", "2deg", "2.9deg", "2.23deg"];
+
+// ---- Sub-components ----
 
 function PortfolioTile({
   title,
   image,
+  tags,
   heightClass,
   className = "",
 }: {
   title: string;
   image: string;
+  tags: string[];
   heightClass: string;
   className?: string;
 }) {
@@ -27,14 +81,15 @@ function PortfolioTile({
           alt=""
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        <div className="relative z-10 flex gap-3">
-          <span className={pillClass} style={pillStyle}>
-            Social Media
-          </span>
-          <span className={pillClass} style={pillStyle}>
-            Photography
-          </span>
-        </div>
+        {tags.length > 0 && (
+          <div className="relative z-10 flex gap-3">
+            {tags.map((tag) => (
+              <span key={tag} className={pillClass} style={pillStyle}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <h3 className="whitespace-nowrap font-black uppercase tracking-[-0.04em] leading-[1.1] text-black text-[24px] md:text-[36px]">
@@ -58,9 +113,11 @@ function PortfolioTile({
 
 function NewsCard({
   image,
+  excerpt,
   topPad = false,
 }: {
   image: string;
+  excerpt: string;
   topPad?: boolean;
 }) {
   return (
@@ -77,8 +134,7 @@ function NewsCard({
         />
       </div>
       <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f]">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        {excerpt}
       </p>
       <button
         type="button"
@@ -152,12 +208,63 @@ function PortfolioCTA() {
   );
 }
 
-export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navLinks = ["About", "Services", "Projects", "News", "Contact"];
+// ---- Page ----
+
+const navLinks = ["About", "Services", "Projects", "News", "Contact"];
+
+export default async function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [rawServices, rawProjects, rawTestimonials, rawPosts] = await Promise.all([
+    client.fetch(SERVICES_QUERY),
+    client.fetch(PROJECTS_QUERY),
+    client.fetch(TESTIMONIALS_QUERY),
+    client.fetch(POSTS_QUERY),
+  ]);
+
+  // Normalize Sanity data or fall back to hardcoded content
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const services: ServiceItem[] = rawServices?.length
+    ? rawServices.map((s: any) => ({
+        _id: s._id,
+        title: s.title ?? "",
+        description: s.description ?? "Placeholder description of this service.",
+        imageUrl: s.image ? urlFor(s.image).width(302).height(302).url() : "",
+      }))
+    : FB_SERVICES;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const projects: ProjectItem[] = rawProjects?.length
+    ? rawProjects.map((p: any) => ({
+        _id: p._id,
+        title: p.title ?? "",
+        imageUrl: p.image ? urlFor(p.image).width(744).height(744).url() : "",
+        tags: p.tags ?? [],
+      }))
+    : FB_PROJECTS;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const testimonials: TestimonialItem[] = rawTestimonials?.length
+    ? rawTestimonials.map((t: any) => ({
+        _id: t._id,
+        author: t.author ?? "",
+        quote: t.quote ?? "",
+        logoUrl: t.logo ? urlFor(t.logo).height(72).url() : "",
+        logoClass: "h-8",
+      }))
+    : FB_TESTIMONIALS;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const posts: PostItem[] = rawPosts?.length
+    ? rawPosts.map((p: any) => ({
+        _id: p._id,
+        imageUrl: p.mainImage ? urlFor(p.mainImage).width(353).height(469).url() : "",
+        excerpt: p.excerpt ?? "",
+      }))
+    : FB_POSTS;
 
   return (
     <main className="relative w-full overflow-x-hidden bg-[#bfced1] font-[family-name:var(--font-inter)]">
+      {/* Hero */}
       <section className="relative min-h-screen w-full overflow-hidden bg-[#bfced1]">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <img
@@ -204,7 +311,8 @@ export default function Home() {
                   filter: "blur(0.4px)",
                 }}
               >
-                <span className="block md:inline">Harvey&nbsp;&nbsp;</span><span className="block -translate-x-[25px] md:inline md:translate-x-0">Specter</span>
+                <span className="block md:inline">Harvey&nbsp;&nbsp;</span>
+                <span className="block -translate-x-[25px] md:inline md:translate-x-0">Specter</span>
               </h1>
             </div>
 
@@ -231,6 +339,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Bio */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
           <div className="flex w-full flex-col items-end gap-3">
@@ -252,9 +361,7 @@ export default function Home() {
               </span>
             </div>
 
-            <div className="whitespace-nowrap md:pl-[14.86vw]">
-              Photographer
-            </div>
+            <div className="whitespace-nowrap md:pl-[14.86vw]">Photographer</div>
 
             <div className="whitespace-nowrap md:pl-[42.36vw]">
               Born{" "}
@@ -280,6 +387,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* About */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto w-full max-w-[1440px]">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
@@ -330,6 +438,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Full-width photo */}
       <section className="relative w-full bg-white">
         <div className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
@@ -340,6 +449,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Services */}
       <section className="relative w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-12">
           <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
@@ -347,18 +457,13 @@ export default function Home() {
           </p>
 
           <div className="flex w-full items-center justify-between whitespace-nowrap font-light uppercase tracking-[-0.08em] leading-none text-[32px] md:text-[clamp(48px,6.667vw,96px)]">
-            <span>[4]</span>
+            <span>[{services.length}]</span>
             <span>Deliverables</span>
           </div>
 
           <div className="flex flex-col gap-12">
-            {[
-              { title: "Brand Discovery", image: "/service-brand.jpg" },
-              { title: "Web design & Dev", image: "/service-web.jpg" },
-              { title: "Marketing", image: "/service-marketing.jpg" },
-              { title: "Photography", image: "/service-photography.jpg" },
-            ].map((item, i) => (
-              <div key={item.title} className="flex flex-col gap-3">
+            {services.map((item, i) => (
+              <div key={item._id} className="flex flex-col gap-3">
                 <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
                   [ {i + 1} ]
                 </p>
@@ -371,13 +476,11 @@ export default function Home() {
 
                   <div className="flex flex-row items-start gap-4 md:gap-6">
                     <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-white md:w-[393px]">
-                      Placeholder description of this service. Explain the
-                      value you provide and the outcomes clients can expect.
-                      Keep it to two or three sentences.
+                      {item.description}
                     </p>
                     <div className="h-[100px] w-[100px] shrink-0 overflow-hidden md:h-[151px] md:w-[151px]">
                       <img
-                        src={item.image}
+                        src={item.imageUrl}
                         alt=""
                         className="h-full w-full object-cover object-center"
                       />
@@ -390,6 +493,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Portfolio */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-[61px]">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -410,10 +514,7 @@ export default function Home() {
             <div className="hidden h-[110px] items-center justify-center md:flex">
               <p
                 className="whitespace-nowrap font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f]"
-                style={{
-                  writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
-                }}
+                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
               >
                 [ portfolio ]
               </p>
@@ -422,33 +523,45 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-end">
             <div className="flex flex-col gap-6">
-              <PortfolioTile
-                title="Surfers paradise"
-                image="/work-surfers.jpg"
-                heightClass="h-[390px] md:h-[744px]"
-                className="md:mb-[50px]"
-              />
-              <PortfolioTile
-                title="Cyberpunk caffe"
-                image="/work-cyberpunk.jpg"
-                heightClass="h-[390px] md:h-[699px]"
-              />
+              {projects[0] && (
+                <PortfolioTile
+                  title={projects[0].title}
+                  image={projects[0].imageUrl}
+                  tags={projects[0].tags}
+                  heightClass="h-[390px] md:h-[744px]"
+                  className="md:mb-[50px]"
+                />
+              )}
+              {projects[1] && (
+                <PortfolioTile
+                  title={projects[1].title}
+                  image={projects[1].imageUrl}
+                  tags={projects[1].tags}
+                  heightClass="h-[390px] md:h-[699px]"
+                />
+              )}
               <div className="hidden md:mt-[50px] md:block">
                 <PortfolioCTA />
               </div>
             </div>
             <div className="flex flex-col gap-6 md:pt-[240px]">
-              <PortfolioTile
-                title="Agency 976"
-                image="/work-agency.jpg"
-                heightClass="h-[390px] md:h-[699px]"
-                className="md:mb-[50px]"
-              />
-              <PortfolioTile
-                title="Minimal Playground"
-                image="/work-minimal.jpg"
-                heightClass="h-[390px] md:h-[744px]"
-              />
+              {projects[2] && (
+                <PortfolioTile
+                  title={projects[2].title}
+                  image={projects[2].imageUrl}
+                  tags={projects[2].tags}
+                  heightClass="h-[390px] md:h-[699px]"
+                  className="md:mb-[50px]"
+                />
+              )}
+              {projects[3] && (
+                <PortfolioTile
+                  title={projects[3].title}
+                  image={projects[3].imageUrl}
+                  tags={projects[3].tags}
+                  heightClass="h-[390px] md:h-[744px]"
+                />
+              )}
             </div>
           </div>
 
@@ -458,47 +571,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
       <section className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="relative mx-auto w-full max-w-[1440px]">
           <h2 className="text-left font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
             Testimonials
           </h2>
 
+          {/* Mobile scroll */}
           <div className="mt-8 -mx-4 flex gap-2 overflow-x-auto pb-4 px-4 md:hidden">
-            <div className="shrink-0" style={{ transform: "rotate(-3.5deg)" }}>
-              <TestimonialCard
-                logo="/logo-marko.svg"
-                logoClass="h-[19px]"
-                quote="A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive."
-                author="Marko Stojković"
-              />
-            </div>
-            <div className="shrink-0" style={{ transform: "rotate(2deg)" }}>
-              <TestimonialCard
-                logo="/logo-sofia.svg"
-                logoClass="h-9"
-                quote="An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats."
-                author="Sofia Martínez"
-              />
-            </div>
-            <div className="shrink-0" style={{ transform: "rotate(2.9deg)" }}>
-              <TestimonialCard
-                logo="/logo-lukas.svg"
-                logoClass="h-[19px]"
-                quote="Professional, precise, and incredibly fast at handling complex product visualizations and templates."
-                author="Lukas Weber"
-              />
-            </div>
-            <div className="shrink-0" style={{ transform: "rotate(2.23deg)" }}>
-              <TestimonialCard
-                logo="/logo-sarah.svg"
-                logoClass="h-[31px]"
-                quote="A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity."
-                author="Sarah Jenkins"
-              />
-            </div>
+            {testimonials.map((t, i) => (
+              <div
+                key={t._id}
+                className="shrink-0"
+                style={{ transform: `rotate(${MOBILE_ROTATIONS[i] ?? "0deg"})` }}
+              >
+                <TestimonialCard
+                  logo={t.logoUrl}
+                  logoClass={t.logoClass}
+                  quote={t.quote}
+                  author={t.author}
+                />
+              </div>
+            ))}
           </div>
 
+          {/* Desktop absolute layout */}
           <div className="hidden md:block">
             <div className="relative isolate mx-auto w-[1238px] max-w-full">
               <h2
@@ -507,73 +605,36 @@ export default function Home() {
               >
                 Testimonials
               </h2>
-              <div
-                className="absolute"
-                style={{
-                  left: "0px",
-                  top: "22px",
-                  transform: "rotate(-6.85deg)",
-                }}
-              >
-                <TestimonialCard
-                  logo="/logo-marko.svg"
-                  logoClass="h-[19px]"
-                  quote="A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive."
-                  author="Marko Stojković"
-                />
-              </div>
-              <div
-                className="absolute"
-                style={{
-                  left: "574px",
-                  top: "152px",
-                  transform: "rotate(2.9deg)",
-                  zIndex: -1,
-                }}
-              >
-                <TestimonialCard
-                  logo="/logo-lukas.svg"
-                  logoClass="h-[19px]"
-                  quote="Professional, precise, and incredibly fast at handling complex product visualizations and templates."
-                  author="Lukas Weber"
-                />
-              </div>
-              <div
-                className="absolute"
-                style={{
-                  left: "203px",
-                  top: "433px",
-                  transform: "rotate(2.23deg)",
-                }}
-              >
-                <TestimonialCard
-                  logo="/logo-sarah.svg"
-                  logoClass="h-[31px]"
-                  quote="A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don't just make things look good; they solve business problems through visual clarity."
-                  author="Sarah Jenkins"
-                />
-              </div>
-              <div
-                className="absolute"
-                style={{
-                  left: "885px",
-                  top: "426px",
-                  transform: "rotate(-4.15deg)",
-                }}
-              >
-                <TestimonialCard
-                  logo="/logo-sofia.svg"
-                  logoClass="h-9"
-                  quote="An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats."
-                  author="Sofia Martínez"
-                />
-              </div>
+              {testimonials.map((t, i) => {
+                const pos = TESTIMONIAL_POSITIONS[i];
+                if (!pos) return null;
+                return (
+                  <div
+                    key={t._id}
+                    className="absolute"
+                    style={{
+                      left: pos.left,
+                      top: pos.top,
+                      transform: `rotate(${pos.rotate})`,
+                      zIndex: pos.zIndex,
+                    }}
+                  >
+                    <TestimonialCard
+                      logo={t.logoUrl}
+                      logoClass={t.logoClass}
+                      quote={t.quote}
+                      author={t.author}
+                    />
+                  </div>
+                );
+              })}
               <div className="h-[900px]" aria-hidden />
             </div>
           </div>
         </div>
       </section>
 
+      {/* News */}
       <section className="relative w-full bg-[#f3f3f3] px-4 py-16 md:px-8 md:py-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
           <h2 className="pr-[150px] font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden md:pr-0">
@@ -592,16 +653,23 @@ export default function Home() {
             </div>
 
             <div className="-mx-4 flex gap-4 overflow-x-auto px-4 md:mx-0 md:ml-[270px] md:w-[1020px] md:items-start md:gap-[31px] md:overflow-visible md:px-0">
-              <NewsCard image="/news-1.jpg" />
-              <div className="hidden w-px self-stretch bg-black/30 md:block" />
-              <NewsCard image="/news-2.jpg" topPad />
-              <div className="hidden w-px self-stretch bg-black/30 md:block" />
-              <NewsCard image="/news-3.jpg" />
+              {posts.flatMap((post, i) => [
+                i > 0 && (
+                  <div key={`divider-${post._id}`} className="hidden w-px self-stretch bg-black/30 md:block" />
+                ),
+                <NewsCard
+                  key={post._id}
+                  image={post.imageUrl}
+                  excerpt={post.excerpt}
+                  topPad={i === 1}
+                />,
+              ])}
             </div>
           </div>
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="relative w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 md:gap-[120px]">
           <div className="flex flex-col gap-6 md:gap-12">
@@ -650,23 +718,15 @@ export default function Home() {
               </p>
             </div>
             <div className="flex gap-[34px] pb-8 text-[12px] font-normal uppercase leading-[1.1] tracking-[-0.04em] text-white">
-              <a href="#" className="underline">
-                licences
-              </a>
-              <a href="#" className="underline">
-                Privacy policy
-              </a>
+              <a href="#" className="underline">licences</a>
+              <a href="#" className="underline">Privacy policy</a>
             </div>
           </div>
 
           <div className="flex flex-col items-center gap-4 md:hidden">
             <div className="flex gap-[34px] pb-8 text-[12px] font-normal uppercase leading-[1.1] tracking-[-0.04em] text-white">
-              <a href="#" className="underline">
-                licences
-              </a>
-              <a href="#" className="underline">
-                Privacy policy
-              </a>
+              <a href="#" className="underline">licences</a>
+              <a href="#" className="underline">Privacy policy</a>
             </div>
             <div className="flex w-full flex-col items-start gap-3 overflow-hidden">
               <p className="font-[family-name:var(--font-geist-mono)] text-[10px] font-normal uppercase leading-[1.1] text-white">
@@ -680,57 +740,7 @@ export default function Home() {
         </div>
       </footer>
 
-      <button
-        type="button"
-        aria-label={menuOpen ? "Close menu" : "Open menu"}
-        aria-expanded={menuOpen}
-        onClick={() => setMenuOpen((v) => !v)}
-        className="fixed right-4 top-6 z-50 flex h-6 w-6 flex-col items-center justify-center gap-1.5 md:hidden"
-      >
-        <span
-          className={`block h-0.5 w-5 bg-black transition-transform ${
-            menuOpen ? "translate-y-2 rotate-45" : ""
-          }`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-black transition-opacity ${
-            menuOpen ? "opacity-0" : ""
-          }`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-black transition-transform ${
-            menuOpen ? "-translate-y-2 -rotate-45" : ""
-          }`}
-        />
-      </button>
-
-      <div
-        className={`fixed inset-0 z-40 flex flex-col bg-[#bfced1] px-4 pt-24 transition-opacity md:hidden ${
-          menuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-      >
-        <ul className="flex flex-col gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
-          {navLinks.map((link) => (
-            <li key={link}>
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                className="text-left"
-              >
-                {link}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <button
-          type="button"
-          className="mt-12 self-start rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
-        >
-          Let&rsquo;s talk
-        </button>
-      </div>
+      <MobileNav />
     </main>
   );
 }
