@@ -7,11 +7,12 @@ export const portfolioProjectType = defineType({
   type: 'document',
   icon: ImageIcon,
   fields: [
-    defineField({name: 'title', type: 'string'}),
+    defineField({name: 'title', type: 'string', validation: (R) => R.required()}),
     defineField({
       name: 'slug',
       type: 'slug',
       options: {source: 'title'},
+      validation: (R) => R.required(),
     }),
     defineField({
       name: 'image',
@@ -20,6 +21,27 @@ export const portfolioProjectType = defineType({
       fields: [
         defineField({name: 'alt', type: 'string', title: 'Alternative text'}),
       ],
+    }),
+    defineField({
+      name: 'description',
+      title: 'Short description',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
+      name: 'client',
+      title: 'Client name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'year',
+      title: 'Year',
+      type: 'number',
+    }),
+    defineField({
+      name: 'url',
+      title: 'Live URL',
+      type: 'url',
     }),
     defineField({
       name: 'tags',

@@ -232,12 +232,13 @@ export default async function Home() {
       }))
     : FB_SERVICES;
 
+  const STATIC_PROJECT_IMAGES = ["/work-surfers.jpg", "/work-cyberpunk.jpg", "/work-agency.jpg", "/work-minimal.jpg"];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const projects: ProjectItem[] = rawProjects?.length
-    ? rawProjects.map((p: any) => ({
+    ? rawProjects.map((p: any, i: number) => ({
         _id: p._id,
         title: p.title ?? "",
-        imageUrl: p.image ? urlFor(p.image).width(744).height(744).url() : "",
+        imageUrl: p.image ? urlFor(p.image).width(744).height(744).url() : (STATIC_PROJECT_IMAGES[i] ?? ""),
         tags: p.tags ?? [],
       }))
     : FB_PROJECTS;
