@@ -2,6 +2,8 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import MobileNav from "./_components/MobileNav";
 
+export const dynamic = 'force-dynamic';
+
 // GROQ queries
 const SERVICES_QUERY = `*[_type == "service"] | order(order asc) { _id, title, description, image }`;
 const PROJECTS_QUERY = `*[_type == "portfolioProject"] | order(order asc)[0...4] { _id, title, image, tags }`;
