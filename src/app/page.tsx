@@ -1,4 +1,4 @@
-import { client } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import MobileNav from "./_components/MobileNav";
 
@@ -213,12 +213,11 @@ function PortfolioCTA() {
 const navLinks = ["About", "Services", "Projects", "News", "Contact"];
 
 export default async function Home() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [rawServices, rawProjects, rawTestimonials, rawPosts] = await Promise.all([
-    client.fetch(SERVICES_QUERY),
-    client.fetch(PROJECTS_QUERY),
-    client.fetch(TESTIMONIALS_QUERY),
-    client.fetch(POSTS_QUERY),
+  const [{ data: rawServices }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = await Promise.all([
+    sanityFetch({ query: SERVICES_QUERY }),
+    sanityFetch({ query: PROJECTS_QUERY }),
+    sanityFetch({ query: TESTIMONIALS_QUERY }),
+    sanityFetch({ query: POSTS_QUERY }),
   ]);
 
   // Normalize Sanity data or fall back to hardcoded content
