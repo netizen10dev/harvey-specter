@@ -213,12 +213,13 @@ function PortfolioCTA() {
 const navLinks = ["About", "Services", "Projects", "News", "Contact"];
 
 export default async function Home() {
-  const [{ data: rawServices }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = await Promise.all([
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [{ data: rawServices }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = (await Promise.all([
     sanityFetch({ query: SERVICES_QUERY }),
     sanityFetch({ query: PROJECTS_QUERY }),
     sanityFetch({ query: TESTIMONIALS_QUERY }),
     sanityFetch({ query: POSTS_QUERY }),
-  ]);
+  ])) as [{ data: any }, { data: any }, { data: any }, { data: any }];
 
   // Normalize Sanity data or fall back to hardcoded content
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
