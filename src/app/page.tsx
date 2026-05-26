@@ -1,6 +1,8 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import MobileNav from "./_components/MobileNav";
+import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
+import MobileNewsSlider from "./_components/MobileNewsSlider";
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +17,11 @@ type ServiceItem = { _id: string; title: string; description: string; imageUrl: 
 type ProjectItem = { _id: string; title: string; imageUrl: string; tags: string[] };
 type TestimonialItem = { _id: string; author: string; quote: string; logoUrl: string; logoClass: string };
 type PostItem = { _id: string; imageUrl: string; excerpt: string };
+type SanityImage = { asset?: { _ref?: string; _type?: string } };
+type SanityService = { _id: string; title?: string; description?: string; image?: SanityImage };
+type SanityProject = { _id: string; title?: string; image?: SanityImage; tags?: string[] };
+type SanityTestimonial = { _id: string; author?: string; quote?: string; logo?: SanityImage };
+type SanityPost = { _id: string; mainImage?: SanityImage; excerpt?: string };
 
 // Fallback content so the site looks correct before Sanity content is added
 const FB_SERVICES: ServiceItem[] = [
@@ -215,18 +222,21 @@ function PortfolioCTA() {
 const navLinks = ["About", "Services", "Projects", "News", "Contact"];
 
 export default async function Home() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [{ data: rawServices }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = (await Promise.all([
     sanityFetch({ query: SERVICES_QUERY }),
     sanityFetch({ query: PROJECTS_QUERY }),
     sanityFetch({ query: TESTIMONIALS_QUERY }),
     sanityFetch({ query: POSTS_QUERY }),
-  ])) as [{ data: any }, { data: any }, { data: any }, { data: any }];
+  ])) as [
+    { data: SanityService[] },
+    { data: SanityProject[] },
+    { data: SanityTestimonial[] },
+    { data: SanityPost[] },
+  ];
 
   // Normalize Sanity data or fall back to hardcoded content
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const services: ServiceItem[] = rawServices?.length
-    ? rawServices.map((s: any) => ({
+    ? rawServices.map((s) => ({
         _id: s._id,
         title: s.title ?? "",
         description: s.description ?? "Placeholder description of this service.",
@@ -235,9 +245,8 @@ export default async function Home() {
     : FB_SERVICES;
 
   const STATIC_PROJECT_IMAGES = ["/work-surfers.jpg", "/work-cyberpunk.jpg", "/work-agency.jpg", "/work-minimal.jpg"];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const projects: ProjectItem[] = rawProjects?.length
-    ? rawProjects.map((p: any, i: number) => ({
+    ? rawProjects.map((p, i) => ({
         _id: p._id,
         title: p.title ?? "",
         imageUrl: p.image ? urlFor(p.image).width(744).height(744).url() : (STATIC_PROJECT_IMAGES[i] ?? ""),
@@ -245,9 +254,8 @@ export default async function Home() {
       }))
     : FB_PROJECTS;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const testimonials: TestimonialItem[] = rawTestimonials?.length
-    ? rawTestimonials.map((t: any) => ({
+    ? rawTestimonials.map((t) => ({
         _id: t._id,
         author: t.author ?? "",
         quote: t.quote ?? "",
@@ -256,9 +264,8 @@ export default async function Home() {
       }))
     : FB_TESTIMONIALS;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const posts: PostItem[] = rawPosts?.length
-    ? rawPosts.map((p: any) => ({
+    ? rawPosts.map((p) => ({
         _id: p._id,
         imageUrl: p.mainImage ? urlFor(p.mainImage).width(353).height(469).url() : "",
         excerpt: p.excerpt ?? "",
@@ -279,7 +286,11 @@ export default async function Home() {
 
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-0 left-0 right-0 h-[200px] backdrop-blur-[4px]"
+          className="pointer-events-none absolute bottom-0 left-0 right-0 h-[200px] md:h-[310px] backdrop-blur-[16px] md:backdrop-blur-[20px]"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent, black)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent, black)",
+          }}
         />
 
         <div className="relative z-10 mx-auto flex min-h-screen max-w-[1440px] flex-col px-4 md:px-8">
@@ -581,23 +592,7 @@ export default async function Home() {
             Testimonials
           </h2>
 
-          {/* Mobile scroll */}
-          <div className="mt-8 -mx-4 flex gap-2 overflow-x-auto pb-4 px-4 md:hidden">
-            {testimonials.map((t, i) => (
-              <div
-                key={t._id}
-                className="shrink-0"
-                style={{ transform: `rotate(${MOBILE_ROTATIONS[i] ?? "0deg"})` }}
-              >
-                <TestimonialCard
-                  logo={t.logoUrl}
-                  logoClass={t.logoClass}
-                  quote={t.quote}
-                  author={t.author}
-                />
-              </div>
-            ))}
-          </div>
+          <MobileTestimonialSlider testimonials={testimonials} />
 
           {/* Desktop absolute layout */}
           <div className="hidden md:block">
@@ -655,7 +650,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="-mx-4 flex gap-4 overflow-x-auto px-4 md:mx-0 md:ml-[270px] md:w-[1020px] md:items-start md:gap-[31px] md:overflow-visible md:px-0">
+            <div className="hidden gap-4 md:ml-[270px] md:flex md:w-[1020px] md:items-start md:gap-[31px]">
               {posts.flatMap((post, i) => [
                 i > 0 && (
                   <div key={`divider-${post._id}`} className="hidden w-px self-stretch bg-black/30 md:block" />
@@ -669,6 +664,7 @@ export default async function Home() {
               ])}
             </div>
           </div>
+          <MobileNewsSlider posts={posts} />
         </div>
       </section>
 
