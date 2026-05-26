@@ -1,14 +1,142 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 
 const navLinks = ["About", "Services", "Projects", "News", "Contact"];
 
+// ---- Desktop nav link with GSAP underline hover ----
+export function NavLink({ label }: { label: string }) {
+  const lineRef = useRef<HTMLSpanElement>(null);
+
+  function onEnter() {
+    gsap.killTweensOf(lineRef.current);
+    gsap.fromTo(
+      lineRef.current,
+      { scaleX: 0, transformOrigin: "left center" },
+      { scaleX: 1, duration: 0.3, ease: "power2.out" }
+    );
+  }
+
+  function onLeave() {
+    gsap.killTweensOf(lineRef.current);
+    gsap.to(lineRef.current, {
+      scaleX: 0,
+      transformOrigin: "right center",
+      duration: 0.25,
+      ease: "power2.in",
+    });
+  }
+
+  return (
+    <button
+      type="button"
+      className="relative pb-0.5"
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      {label}
+      <span
+        ref={lineRef}
+        className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+      />
+    </button>
+  );
+}
+
+// ---- Desktop CTA button with GSAP fill hover ----
+export function NavButton({ label, className = "" }: { label: string; className?: string }) {
+  const fillRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  function onEnter() {
+    gsap.killTweensOf([fillRef.current, textRef.current]);
+    gsap.fromTo(
+      fillRef.current,
+      { scaleY: 0, transformOrigin: "bottom center" },
+      { scaleY: 1, duration: 0.3, ease: "power2.out" }
+    );
+    gsap.to(textRef.current, { color: "#000", duration: 0.2, ease: "none" });
+  }
+
+  function onLeave() {
+    gsap.killTweensOf([fillRef.current, textRef.current]);
+    gsap.to(fillRef.current, {
+      scaleY: 0,
+      transformOrigin: "top center",
+      duration: 0.25,
+      ease: "power2.in",
+    });
+    gsap.to(textRef.current, { color: "#fff", duration: 0.2, ease: "none" });
+  }
+
+  return (
+    <button
+      type="button"
+      className={`relative overflow-hidden rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] ${className}`}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      <span
+        ref={fillRef}
+        className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-white"
+        aria-hidden
+      />
+      <span ref={textRef} className="relative text-white">
+        {label}
+      </span>
+    </button>
+  );
+}
+
+// ---- Mobile nav ----
 export default function MobileNav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const isAnimating = useRef(false);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    const items = listRef.current?.querySelectorAll("li");
+    const cta = ctaRef.current;
+    if (!overlay || !items || !cta) return;
+
+    // Set initial state
+    gsap.set(overlay, { autoAlpha: 0, y: "-100%" });
+    gsap.set(items, { y: 40, autoAlpha: 0 });
+    gsap.set(cta, { y: 20, autoAlpha: 0 });
+  }, []);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    const items = listRef.current?.querySelectorAll("li");
+    const cta = ctaRef.current;
+    if (!overlay || !items || !cta) return;
+
+    if (tlRef.current) tlRef.current.kill();
+
+    const tl = gsap.timeline({
+      onStart: () => { isAnimating.current = true; },
+      onComplete: () => { isAnimating.current = false; },
+    });
+    tlRef.current = tl;
+
+    if (menuOpen) {
+      tl.to(overlay, { autoAlpha: 1, y: "0%", duration: 0.45, ease: "power3.out" })
+        .to(items, { y: 0, autoAlpha: 1, duration: 0.35, ease: "power2.out", stagger: 0.07 }, "-=0.2")
+        .to(cta, { y: 0, autoAlpha: 1, duration: 0.3, ease: "power2.out" }, "-=0.15");
+    } else {
+      tl.to([...items, cta], { y: 20, autoAlpha: 0, duration: 0.2, ease: "power2.in", stagger: 0.04 })
+        .to(overlay, { autoAlpha: 0, y: "-100%", duration: 0.35, ease: "power3.in" }, "-=0.1");
+    }
+  }, [menuOpen]);
 
   return (
     <>
+      {/* Hamburger */}
       <button
         type="button"
         aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -16,44 +144,28 @@ export default function MobileNav() {
         onClick={() => setMenuOpen((v) => !v)}
         className="fixed right-4 top-6 z-50 flex h-6 w-6 flex-col items-center justify-center gap-1.5 md:hidden"
       >
-        <span
-          className={`block h-0.5 w-5 bg-black transition-transform ${
-            menuOpen ? "translate-y-2 rotate-45" : ""
-          }`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-black transition-opacity ${
-            menuOpen ? "opacity-0" : ""
-          }`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-black transition-transform ${
-            menuOpen ? "-translate-y-2 -rotate-45" : ""
-          }`}
-        />
+        <span className={`block h-0.5 w-5 bg-black transition-transform duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""}`} />
+        <span className={`block h-0.5 w-5 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+        <span className={`block h-0.5 w-5 bg-black transition-transform duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
       </button>
 
+      {/* Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex flex-col bg-[#bfced1] px-4 pt-24 transition-opacity md:hidden ${
-          menuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
+        ref={overlayRef}
+        className="fixed inset-0 z-40 flex flex-col bg-[#bfced1] px-4 pt-24 md:hidden"
+        style={{ visibility: "hidden" }}
       >
-        <ul className="flex flex-col gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
+        <ul ref={listRef} className="flex flex-col gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
           {navLinks.map((link) => (
             <li key={link}>
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                className="text-left"
-              >
+              <button type="button" onClick={() => setMenuOpen(false)} className="text-left">
                 {link}
               </button>
             </li>
           ))}
         </ul>
         <button
+          ref={ctaRef}
           type="button"
           className="mt-12 self-start rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
         >

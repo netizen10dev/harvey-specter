@@ -1,6 +1,6 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
-import MobileNav from "./_components/MobileNav";
+import MobileNav, { NavLink, NavButton } from "./_components/MobileNav";
 import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
 import MobileNewsSlider from "./_components/MobileNewsSlider";
 
@@ -202,12 +202,7 @@ function PortfolioCTA() {
           Discover how my creativity transforms ideas into impactful digital
           experiences &mdash; schedule a call with me to get started.
         </p>
-        <button
-          type="button"
-          className="rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
-        >
-          Let&rsquo;s talk
-        </button>
+        <NavButton label="Let's talk" />
       </div>
       <div className="flex w-6 flex-col items-end justify-between py-1">
         <span className="block h-4 w-4 border-r border-t border-[#1f1f1f]" />
@@ -300,15 +295,12 @@ export default async function Home() {
             </span>
             <ul className="hidden items-center gap-14 text-base font-semibold capitalize tracking-[-0.04em] text-black md:flex">
               {navLinks.map((link) => (
-                <li key={link}>{link}</li>
+                <li key={link}><NavLink label={link} /></li>
               ))}
             </ul>
-            <button
-              type="button"
-              className="hidden rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white md:inline-flex"
-            >
-              Let&rsquo;s talk
-            </button>
+            <div className="hidden md:block">
+              <NavButton label="Let's talk" />
+            </div>
           </nav>
 
           <div className="flex flex-1 flex-col justify-end pb-[4px] md:pb-[154px]">
@@ -341,12 +333,7 @@ export default async function Home() {
                   desing and art group specializing in branding, web design and
                   engineering.
                 </p>
-                <button
-                  type="button"
-                  className="rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
-                >
-                  Let&rsquo;s talk
-                </button>
+                <NavButton label="Let's talk" />
               </div>
             </div>
           </div>
@@ -679,12 +666,7 @@ export default async function Home() {
                   <span className="font-black not-italic">project</span> in
                   mind?
                 </p>
-                <button
-                  type="button"
-                  className="rounded-3xl border border-solid border-white px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
-                >
-                  Let&rsquo;s talk
-                </button>
+                <NavButton label="Let's talk" className="border border-solid border-white" />
               </div>
 
               <div className="flex flex-col gap-[10px] text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:w-[298px] md:items-center md:text-center">
