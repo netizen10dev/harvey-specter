@@ -98,6 +98,8 @@ export default function MobileNav() {
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const isAnimating = useRef(false);
   const underlineRefs = useRef<(HTMLSpanElement | null)[]>(Array(navLinks.length).fill(null));
+  const ctaFillRef = useRef<HTMLSpanElement>(null);
+  const ctaTextRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -133,6 +135,18 @@ export default function MobileNav() {
         .to(overlay, { autoAlpha: 0, y: "-100%", duration: 0.35, ease: "power3.in" }, "-=0.1");
     }
   }, [menuOpen]);
+
+  function onCtaEnter() {
+    gsap.killTweensOf([ctaFillRef.current, ctaTextRef.current]);
+    gsap.fromTo(ctaFillRef.current, { scaleY: 0, transformOrigin: "bottom center" }, { scaleY: 1, duration: 0.3, ease: "power2.out" });
+    gsap.to(ctaTextRef.current, { color: "#000", duration: 0.2, ease: "none" });
+  }
+
+  function onCtaLeave() {
+    gsap.killTweensOf([ctaFillRef.current, ctaTextRef.current]);
+    gsap.to(ctaFillRef.current, { scaleY: 0, transformOrigin: "top center", duration: 0.25, ease: "power2.in" });
+    gsap.to(ctaTextRef.current, { color: "#fff", duration: 0.2, ease: "none" });
+  }
 
   function makeLinkHover(i: number) {
     return {
@@ -191,9 +205,12 @@ export default function MobileNav() {
         <button
           ref={ctaRef}
           type="button"
-          className="mt-12 rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
+          className="relative mt-12 overflow-hidden rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em]"
+          onMouseEnter={onCtaEnter}
+          onMouseLeave={onCtaLeave}
         >
-          Let&rsquo;s talk
+          <span ref={ctaFillRef} className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-white" aria-hidden />
+          <span ref={ctaTextRef} className="relative text-white">Let&rsquo;s talk</span>
         </button>
       </div>
     </>
