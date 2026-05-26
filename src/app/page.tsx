@@ -1,6 +1,7 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import MobileNav, { NavButton } from "./_components/MobileNav";
+import DesktopNav from "./_components/DesktopNav";
 import HeroSection from "./_components/HeroSection";
 import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
 import MobileNewsSlider from "./_components/MobileNewsSlider";
@@ -269,6 +270,7 @@ export default async function Home() {
 
   return (
     <main className="relative w-full overflow-x-hidden bg-[#bfced1] font-[family-name:var(--font-inter)]">
+      <DesktopNav />
       <HeroSection />
 
       {/* Bio */}
@@ -371,7 +373,7 @@ export default async function Home() {
       </section>
 
       {/* Full-width photo */}
-      <section className="relative w-full bg-white">
+      <section data-dark-section className="relative w-full bg-white">
         <div className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
             src="/photographer.jpg"
@@ -382,7 +384,7 @@ export default async function Home() {
       </section>
 
       {/* Services */}
-      <section className="relative w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
+      <section data-dark-section className="relative w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-12">
           <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
             [ services ]
@@ -587,7 +589,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
+      <footer data-dark-section className="relative w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 md:gap-[120px]">
           <div className="flex flex-col gap-6 md:gap-12">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">

@@ -1,7 +1,5 @@
 import HeroParallax from "./HeroParallax";
-import { NavLink, NavButton } from "./MobileNav";
-
-const navLinks = ["About", "Services", "Projects", "News", "Contact"];
+import { NavButton } from "./MobileNav";
 
 export default function HeroSection() {
   return (
@@ -26,20 +24,6 @@ export default function HeroSection() {
         />
 
         <div className="relative z-10 mx-auto flex min-h-screen max-w-[1440px] flex-col px-4 md:px-8">
-          <nav className="flex items-center justify-between py-6">
-            <span className="text-base font-semibold capitalize tracking-[-0.04em] text-black">
-              H.Studio
-            </span>
-            <ul className="hidden items-center gap-14 text-base font-semibold capitalize tracking-[-0.04em] text-black md:flex">
-              {navLinks.map((link) => (
-                <li key={link}><NavLink label={link} /></li>
-              ))}
-            </ul>
-            <div className="hidden md:block">
-              <NavButton label="Let's talk" />
-            </div>
-          </nav>
-
           <div className="flex flex-1 flex-col justify-end pb-[4px] md:pb-[154px]">
             <div className="flex w-full flex-col items-center">
               <p
