@@ -97,6 +97,7 @@ export default function MobileNav() {
   const ctaRef = useRef<HTMLButtonElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const isAnimating = useRef(false);
+  const underlineRefs = useRef<(HTMLSpanElement | null)[]>(Array(navLinks.length).fill(null));
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -104,7 +105,6 @@ export default function MobileNav() {
     const cta = ctaRef.current;
     if (!overlay || !items || !cta) return;
 
-    // Set initial state
     gsap.set(overlay, { autoAlpha: 0, y: "-100%" });
     gsap.set(items, { y: 40, autoAlpha: 0 });
     gsap.set(cta, { y: 20, autoAlpha: 0 });
@@ -134,6 +134,21 @@ export default function MobileNav() {
     }
   }, [menuOpen]);
 
+  function makeLinkHover(i: number) {
+    return {
+      onMouseEnter() {
+        const line = underlineRefs.current[i];
+        gsap.killTweensOf(line);
+        gsap.fromTo(line, { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.3, ease: "power2.out" });
+      },
+      onMouseLeave() {
+        const line = underlineRefs.current[i];
+        gsap.killTweensOf(line);
+        gsap.to(line, { scaleX: 0, transformOrigin: "right center", duration: 0.25, ease: "power2.in" });
+      },
+    };
+  }
+
   return (
     <>
       {/* Hamburger */}
@@ -152,14 +167,23 @@ export default function MobileNav() {
       {/* Overlay */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-40 flex flex-col bg-[#bfced1] px-4 pt-24 md:hidden"
+        className="fixed inset-0 z-40 flex flex-col items-center bg-[#bfced1] px-4 pt-24 md:hidden"
         style={{ visibility: "hidden" }}
       >
-        <ul ref={listRef} className="flex flex-col gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
-          {navLinks.map((link) => (
+        <ul ref={listRef} className="flex flex-col items-center gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
+          {navLinks.map((link, i) => (
             <li key={link}>
-              <button type="button" onClick={() => setMenuOpen(false)} className="text-left">
-                {link}
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                className="relative pb-0.5"
+                {...makeLinkHover(i)}
+              >
+                <span className="inline-block">{link}</span>
+                <span
+                  ref={(el) => { underlineRefs.current[i] = el; }}
+                  className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+                />
               </button>
             </li>
           ))}
@@ -167,7 +191,7 @@ export default function MobileNav() {
         <button
           ref={ctaRef}
           type="button"
-          className="mt-12 self-start rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
+          className="mt-12 rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] text-white"
         >
           Let&rsquo;s talk
         </button>
