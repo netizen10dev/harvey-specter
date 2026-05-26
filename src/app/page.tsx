@@ -588,7 +588,7 @@ export default async function Home() {
       {/* Testimonials */}
       <section className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="relative mx-auto w-full max-w-[1440px]">
-          <h2 className="text-left font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
+          <h2 className="text-center font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
             Testimonials
           </h2>
 
