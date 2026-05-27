@@ -7,6 +7,7 @@ import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
 import MobileNewsSlider from "./_components/MobileNewsSlider";
 import ServiceRow from "./_components/ServiceRow";
 import PortfolioTile from "./_components/PortfolioTile";
+import TestimonialsDesktop from "./_components/TestimonialsDesktop";
 import ScrollAnimations from "./_components/ScrollAnimations";
 
 export const dynamic = 'force-dynamic';
@@ -56,16 +57,6 @@ const FB_POSTS: PostItem[] = [
   { _id: "n3", imageUrl: "/news-3.jpg", excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
 ];
 
-// Desktop testimonial card layout positions
-const TESTIMONIAL_POSITIONS = [
-  { left: "0px", top: "22px", rotate: "-6.85deg", zIndex: 0 },
-  { left: "574px", top: "152px", rotate: "2.9deg", zIndex: -1 },
-  { left: "203px", top: "433px", rotate: "2.23deg", zIndex: 0 },
-  { left: "885px", top: "426px", rotate: "-4.15deg", zIndex: 0 },
-];
-
-const MOBILE_ROTATIONS = ["-3.5deg", "2deg", "2.9deg", "2.23deg"];
-
 // ---- Sub-components ----
 
 function NewsCard({
@@ -110,30 +101,6 @@ function NewsCard({
           <path d="M7 17L17 7 M9 7H17V15" />
         </svg>
       </button>
-    </div>
-  );
-}
-
-function TestimonialCard({
-  logo,
-  logoClass = "h-5",
-  quote,
-  author,
-}: {
-  logo: string;
-  logoClass?: string;
-  quote: string;
-  author: string;
-}) {
-  return (
-    <div className="flex w-[260px] shrink-0 flex-col items-start gap-4 rounded-[6px] border border-solid border-black/5 bg-[#f5f4f0] p-6 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.18),0_4px_12px_-2px_rgba(0,0,0,0.08)] md:w-[353px]">
-      <img src={logo} alt="" className={`${logoClass} w-auto object-contain opacity-40`} />
-      <p className="font-[family-name:var(--font-inter)] text-[18px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f]">
-        {quote}
-      </p>
-      <p className="font-[family-name:var(--font-inter)] text-[16px] font-black uppercase leading-[1.1] tracking-[-0.04em] text-black">
-        {author}
-      </p>
     </div>
   );
 }
@@ -442,41 +409,7 @@ export default async function Home() {
 
           <MobileTestimonialSlider testimonials={testimonials} />
 
-          {/* Desktop absolute layout */}
-          <div className="hidden md:block">
-            <div data-animate-stagger="" className="relative isolate mx-auto w-[1238px] max-w-full">
-              <h2
-                className="pointer-events-none absolute left-0 right-0 z-0 text-center font-medium capitalize tracking-[-0.07em] text-black md:text-[clamp(80px,13.75vw,198px)] md:leading-[1.1]"
-                style={{ top: "375px", transform: "translateY(-50%)" }}
-              >
-                Testimonials
-              </h2>
-              {testimonials.map((t, i) => {
-                const pos = TESTIMONIAL_POSITIONS[i];
-                if (!pos) return null;
-                return (
-                  <div
-                    key={t._id}
-                    className="absolute"
-                    style={{
-                      left: pos.left,
-                      top: pos.top,
-                      transform: `rotate(${pos.rotate})`,
-                      zIndex: pos.zIndex,
-                    }}
-                  >
-                    <TestimonialCard
-                      logo={t.logoUrl}
-                      logoClass={t.logoClass}
-                      quote={t.quote}
-                      author={t.author}
-                    />
-                  </div>
-                );
-              })}
-              <div className="h-[900px]" aria-hidden />
-            </div>
-          </div>
+          <TestimonialsDesktop testimonials={testimonials} />
         </div>
       </section>
 
