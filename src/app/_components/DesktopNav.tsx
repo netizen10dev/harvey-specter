@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
-const navLinks = ["About", "Services", "Projects", "News", "Contact"];
+const navLinks = [
+  { label: "About",    href: "/about" },
+  { label: "Services", href: null     },
+  { label: "Projects", href: null     },
+  { label: "News",     href: null     },
+  { label: "Contact",  href: null     },
+];
 
 export default function DesktopNav() {
   const navRef = useRef<HTMLElement>(null);
@@ -97,29 +104,46 @@ export default function DesktopNav() {
   return (
     <nav ref={navRef} className="fixed left-0 right-0 top-0 z-50 hidden md:block">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-8 py-6">
-        <span
+        <Link
+          href="/"
           data-nav-text
           className="text-base font-semibold capitalize tracking-[-0.04em] text-black"
         >
           H.Studio
-        </span>
+        </Link>
 
         <ul className="flex items-center gap-14 text-base font-semibold capitalize tracking-[-0.04em]">
           {navLinks.map((link, i) => (
-            <li key={link}>
-              <button
-                type="button"
-                data-nav-text
-                className="relative pb-0.5 text-black"
-                {...makeHoverHandlers(i)}
-              >
-                {link}
-                <span
-                  data-nav-line
-                  ref={(el) => { underlinesRef.current[i] = el; }}
-                  className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
-                />
-              </button>
+            <li key={link.label}>
+              {link.href ? (
+                <Link
+                  href={link.href}
+                  data-nav-text
+                  className="relative pb-0.5 text-black"
+                  {...makeHoverHandlers(i)}
+                >
+                  {link.label}
+                  <span
+                    data-nav-line
+                    ref={(el) => { underlinesRef.current[i] = el; }}
+                    className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+                  />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  data-nav-text
+                  className="relative pb-0.5 text-black"
+                  {...makeHoverHandlers(i)}
+                >
+                  {link.label}
+                  <span
+                    data-nav-line
+                    ref={(el) => { underlinesRef.current[i] = el; }}
+                    className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+                  />
+                </button>
+              )}
             </li>
           ))}
         </ul>

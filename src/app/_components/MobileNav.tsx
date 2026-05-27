@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
-const navLinks = ["About", "Services", "Projects", "News", "Contact"];
+const navLinks = [
+  { label: "About",    href: "/about" },
+  { label: "Services", href: null     },
+  { label: "Projects", href: null     },
+  { label: "News",     href: null     },
+  { label: "Contact",  href: null     },
+];
 
 // ---- Desktop nav link with GSAP underline hover ----
 export function NavLink({ label }: { label: string }) {
@@ -186,19 +193,34 @@ export default function MobileNav() {
       >
         <ul ref={listRef} className="flex flex-col items-center gap-8 text-3xl font-semibold capitalize tracking-[-0.04em] text-black">
           {navLinks.map((link, i) => (
-            <li key={link}>
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                className="relative pb-0.5"
-                {...makeLinkHover(i)}
-              >
-                <span className="inline-block">{link}</span>
-                <span
-                  ref={(el) => { underlineRefs.current[i] = el; }}
-                  className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
-                />
-              </button>
+            <li key={link.label}>
+              {link.href ? (
+                <Link
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="relative pb-0.5"
+                  {...makeLinkHover(i)}
+                >
+                  <span className="inline-block">{link.label}</span>
+                  <span
+                    ref={(el) => { underlineRefs.current[i] = el; }}
+                    className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+                  />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  className="relative pb-0.5"
+                  {...makeLinkHover(i)}
+                >
+                  <span className="inline-block">{link.label}</span>
+                  <span
+                    ref={(el) => { underlineRefs.current[i] = el; }}
+                    className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-black"
+                  />
+                </button>
+              )}
             </li>
           ))}
         </ul>
