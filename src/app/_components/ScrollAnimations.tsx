@@ -45,7 +45,7 @@ export default function ScrollAnimations() {
       const tween = gsap.to(el, {
         filter: "blur(0px)",
         opacity: 1,
-        delay: 1,
+        delay: 2,
         duration: 1,
         ease: "power1.out",
         scrollTrigger: { trigger: el, ...ST },
