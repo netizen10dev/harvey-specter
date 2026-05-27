@@ -58,8 +58,16 @@ export default function ScrollAnimations() {
     document.querySelectorAll<HTMLElement>("[data-animate-x-md]").forEach((el) => {
       if (isDesktop) {
         gsap.set(el, { opacity: 0, x: -80 });
-        const tween = gsap.to(el, { opacity: 1, x: 0, duration: 0.9, ease: "power2.out", scrollTrigger: { trigger: el, ...ST } });
-        if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+        const slideIn  = () => gsap.fromTo(el, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.9, ease: "power2.out" });
+        const slideOut = () => gsap.to(el, { x: 80, opacity: 0, duration: 0.6, ease: "power2.in", onComplete: () => gsap.set(el, { x: -80 }) });
+        const st = ScrollTrigger.create({
+          trigger: el,
+          start: "top 88%",
+          onEnter: slideIn,
+          onEnterBack: slideIn,
+          onLeaveBack: slideOut,
+        });
+        triggers.push(st);
       } else {
         gsap.set(el, from);
         const tween = gsap.to(el, { ...to, scrollTrigger: { trigger: el, ...ST } });
