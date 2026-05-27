@@ -360,7 +360,7 @@ export default async function Home() {
                 <p className="hidden font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:block">
                   002
                 </p>
-                <div data-animate="" className="aspect-[422/594] w-full overflow-hidden md:h-[614px] md:w-[436px] md:aspect-auto">
+                <div data-animate-focus-md="" className="aspect-[422/594] w-full overflow-hidden md:h-[614px] md:w-[436px] md:aspect-auto">
                   <img
                     src="/about-portrait.jpg"
                     alt=""
