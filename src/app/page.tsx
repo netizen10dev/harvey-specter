@@ -334,7 +334,7 @@ export default async function Home() {
             </p>
 
             <div className="flex flex-col gap-5 md:w-[983px] md:flex-row md:items-end md:gap-8">
-              <div data-animate-focus="" className="flex flex-1 items-stretch gap-3">
+              <div data-animate-x-md="" className="flex flex-1 items-stretch gap-3">
                 <div className="flex w-6 flex-col items-start justify-between">
                   <span className="block h-4 w-4 border-l border-t border-[#1f1f1f]" />
                   <span className="block h-4 w-4 border-b border-l border-[#1f1f1f]" />

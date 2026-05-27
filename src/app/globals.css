@@ -5,7 +5,8 @@
 [data-animate-stagger] > *,
 [data-animate-stagger-x] > *,
 [data-animate-focus],
-[data-animate-focus-md] {
+[data-animate-focus-md],
+[data-animate-x-md] {
   opacity: 0;
 }
 

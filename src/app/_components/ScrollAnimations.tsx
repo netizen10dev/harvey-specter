@@ -54,6 +54,19 @@ export default function ScrollAnimations() {
     });
 
     const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+
+    document.querySelectorAll<HTMLElement>("[data-animate-x-md]").forEach((el) => {
+      if (isDesktop) {
+        gsap.set(el, { opacity: 0, x: -80 });
+        const tween = gsap.to(el, { opacity: 1, x: 0, duration: 0.9, ease: "power2.out", scrollTrigger: { trigger: el, ...ST } });
+        if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+      } else {
+        gsap.set(el, from);
+        const tween = gsap.to(el, { ...to, scrollTrigger: { trigger: el, ...ST } });
+        if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+      }
+    });
+
     document.querySelectorAll<HTMLElement>("[data-animate-focus-md]").forEach((el) => {
       if (isDesktop) {
         gsap.set(el, { opacity: 0, filter: "blur(14px)", scale: 1.04 });
