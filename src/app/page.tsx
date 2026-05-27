@@ -5,6 +5,7 @@ import DesktopNav from "./_components/DesktopNav";
 import HeroSection from "./_components/HeroSection";
 import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
 import MobileNewsSlider from "./_components/MobileNewsSlider";
+import ServiceRow from "./_components/ServiceRow";
 import ScrollAnimations from "./_components/ScrollAnimations";
 
 export const dynamic = 'force-dynamic';
@@ -398,31 +399,13 @@ export default async function Home() {
 
           <div data-animate-stagger="" className="flex flex-col gap-12">
             {services.map((item, i) => (
-              <div key={item._id} className="flex flex-col gap-3">
-                <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
-                  [ {i + 1} ]
-                </p>
-                <div className="h-px w-full bg-white" />
-
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">
-                  <h3 className="whitespace-nowrap font-bold italic uppercase tracking-[-0.04em] leading-[1.1] text-[36px]">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex flex-row items-start gap-4 md:gap-6">
-                    <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-white md:w-[393px]">
-                      {item.description}
-                    </p>
-                    <div className="h-[100px] w-[100px] shrink-0 overflow-hidden md:h-[151px] md:w-[151px]">
-                      <img
-                        src={item.imageUrl}
-                        alt=""
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ServiceRow
+                key={item._id}
+                index={i}
+                title={item.title}
+                description={item.description}
+                imageUrl={item.imageUrl}
+              />
             ))}
           </div>
         </div>
