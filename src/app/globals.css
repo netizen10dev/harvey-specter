@@ -3,6 +3,7 @@
 /* Pre-hide scroll-animated elements to prevent SSR flash */
 [data-animate],
 [data-animate-stagger] > *,
-[data-animate-stagger-x] > * {
+[data-animate-stagger-x] > *,
+[data-animate-focus] {
   opacity: 0;
 }

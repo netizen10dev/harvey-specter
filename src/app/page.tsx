@@ -325,16 +325,16 @@ export default async function Home() {
       {/* About */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <div data-animate="" className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
+          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:hidden">
               002
             </p>
-            <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:whitespace-nowrap">
+            <p data-animate="" className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:whitespace-nowrap">
               [ About ]
             </p>
 
             <div className="flex flex-col gap-5 md:w-[983px] md:flex-row md:items-end md:gap-8">
-              <div className="flex flex-1 items-stretch gap-3">
+              <div data-animate-focus="" className="flex flex-1 items-stretch gap-3">
                 <div className="flex w-6 flex-col items-start justify-between">
                   <span className="block h-4 w-4 border-l border-t border-[#1f1f1f]" />
                   <span className="block h-4 w-4 border-b border-l border-[#1f1f1f]" />
@@ -360,7 +360,7 @@ export default async function Home() {
                 <p className="hidden font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:block">
                   002
                 </p>
-                <div className="aspect-[422/594] w-full overflow-hidden md:h-[614px] md:w-[436px] md:aspect-auto">
+                <div data-animate="" className="aspect-[422/594] w-full overflow-hidden md:h-[614px] md:w-[436px] md:aspect-auto">
                   <img
                     src="/about-portrait.jpg"
                     alt=""

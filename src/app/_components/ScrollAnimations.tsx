@@ -27,6 +27,19 @@ export default function ScrollAnimations() {
       if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     });
 
+    document.querySelectorAll<HTMLElement>("[data-animate-focus]").forEach((el) => {
+      gsap.set(el, { opacity: 0, filter: "blur(14px)", scale: 1.04 });
+      const tween = gsap.to(el, {
+        opacity: 1,
+        filter: "blur(0px)",
+        scale: 1,
+        duration: 1.2,
+        ease: "power2.out",
+        scrollTrigger: { trigger: el, ...ST },
+      });
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
+
     const fromX = { opacity: 0, x: -60 };
     const toX = { opacity: 1, x: 0, duration: 0.9, ease: "power2.out" };
 
