@@ -8,6 +8,7 @@ import MobileNewsSlider from "./_components/MobileNewsSlider";
 import ServiceRow from "./_components/ServiceRow";
 import PortfolioTile from "./_components/PortfolioTile";
 import TestimonialsDesktop from "./_components/TestimonialsDesktop";
+import NewsCard from "./_components/NewsCard";
 import ScrollAnimations from "./_components/ScrollAnimations";
 
 export const dynamic = 'force-dynamic';
@@ -59,51 +60,6 @@ const FB_POSTS: PostItem[] = [
 
 // ---- Sub-components ----
 
-function NewsCard({
-  image,
-  excerpt,
-  topPad = false,
-}: {
-  image: string;
-  excerpt: string;
-  topPad?: boolean;
-}) {
-  return (
-    <div
-      className={`flex w-[300px] shrink-0 flex-col gap-4 md:w-[353px] ${
-        topPad ? "md:pt-[120px]" : ""
-      }`}
-    >
-      <div className="h-[398px] w-full overflow-hidden md:h-[469px]">
-        <img
-          src={image}
-          alt=""
-          className="h-full w-full object-cover object-center"
-        />
-      </div>
-      <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f]">
-        {excerpt}
-      </p>
-      <button
-        type="button"
-        className="inline-flex w-fit items-center gap-2.5 border-b border-black py-1 text-[14px] font-medium tracking-[-0.04em] text-black"
-      >
-        Read more
-        <svg
-          viewBox="0 0 24 24"
-          className="h-[18px] w-[18px]"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M7 17L17 7 M9 7H17V15" />
-        </svg>
-      </button>
-    </div>
-  );
-}
 
 function PortfolioCTA() {
   return (
@@ -421,8 +377,9 @@ export default async function Home() {
           </h2>
 
           <div className="mt-8 flex flex-col md:mt-0 md:flex-row md:items-end md:gap-8">
-            <div data-animate="" className="hidden h-[706px] w-[110px] shrink-0 items-center justify-center md:flex">
+            <div className="hidden h-[706px] w-[110px] shrink-0 items-center justify-center md:flex">
               <div
+                data-animate-stagger=""
                 className="flex flex-col whitespace-nowrap font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[64px]"
                 style={{ transform: "rotate(-90deg)" }}
               >
