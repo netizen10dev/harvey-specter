@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
 
 type PostItem = {
   _id: string;
@@ -44,13 +45,33 @@ function NewsCard({ image, excerpt }: { image: string; excerpt: string }) {
 
 export default function MobileNewsSlider({ posts }: { posts: PostItem[] }) {
   const [current, setCurrent] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
   const post = posts[current];
+
+  function onPress() {
+    gsap.killTweensOf(cardRef.current);
+    gsap.to(cardRef.current, { y: -12, scale: 1.03, duration: 0.2, ease: "power2.out" });
+  }
+
+  function onRelease() {
+    gsap.killTweensOf(cardRef.current);
+    gsap.to(cardRef.current, { y: 0, scale: 1, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+  }
 
   if (!post) return null;
 
   return (
     <div className="mt-8 flex flex-col items-center gap-6 md:hidden">
-      <NewsCard image={post.imageUrl} excerpt={post.excerpt} />
+      <div
+        ref={cardRef}
+        onPointerDown={onPress}
+        onPointerUp={onRelease}
+        onPointerLeave={onRelease}
+        onClick={() => setCurrent((prev) => (prev + 1) % posts.length)}
+        className="cursor-pointer"
+      >
+        <NewsCard image={post.imageUrl} excerpt={post.excerpt} />
+      </div>
 
       <div className="flex items-center gap-3">
         {posts.map((_, i) => (

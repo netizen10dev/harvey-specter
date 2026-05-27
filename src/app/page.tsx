@@ -9,6 +9,7 @@ import ServiceRow from "./_components/ServiceRow";
 import PortfolioTile from "./_components/PortfolioTile";
 import TestimonialsDesktop from "./_components/TestimonialsDesktop";
 import NewsCard from "./_components/NewsCard";
+import FooterSocialLinks from "./_components/FooterSocialLinks";
 import ScrollAnimations from "./_components/ScrollAnimations";
 
 export const dynamic = 'force-dynamic';
@@ -420,15 +421,7 @@ export default async function Home() {
                 <NavButton label="Let's talk" className="border border-solid border-white" />
               </div>
 
-              <div className="flex flex-col gap-[10px] text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:w-[298px] md:items-center md:text-center">
-                <p>Facebook</p>
-                <p>Instagram</p>
-              </div>
-
-              <div className="-mt-[6px] flex flex-col gap-[10px] text-[18px] uppercase tracking-[-0.04em] leading-[1.1] text-white md:mt-0 md:w-[298px] md:items-end md:text-right">
-                <p>x.com</p>
-                <p>Linkedin</p>
-              </div>
+              <FooterSocialLinks />
             </div>
             <div className="h-px w-full bg-white" />
           </div>

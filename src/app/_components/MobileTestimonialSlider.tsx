@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
 
 type TestimonialItem = {
   _id: string;
@@ -42,21 +43,39 @@ export default function MobileTestimonialSlider({
   testimonials: TestimonialItem[];
 }) {
   const [current, setCurrent] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
   const t = testimonials[current];
+
+  function onPress() {
+    gsap.killTweensOf(cardRef.current);
+    gsap.to(cardRef.current, { y: -12, scale: 1.03, duration: 0.2, ease: "power2.out" });
+  }
+
+  function onRelease() {
+    gsap.killTweensOf(cardRef.current);
+    gsap.to(cardRef.current, { y: 0, scale: 1, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+  }
 
   if (!t) return null;
 
   return (
     <div className="mt-8 flex flex-col items-center gap-6 md:hidden">
-      <div
-        style={{ transform: `rotate(${MOBILE_ROTATIONS[current] ?? "0deg"})` }}
-      >
-        <TestimonialCard
-          logo={t.logoUrl}
-          logoClass={t.logoClass}
-          quote={t.quote}
-          author={t.author}
-        />
+      <div style={{ transform: `rotate(${MOBILE_ROTATIONS[current] ?? "0deg"})` }}>
+        <div
+          ref={cardRef}
+          onPointerDown={onPress}
+          onPointerUp={onRelease}
+          onPointerLeave={onRelease}
+          onClick={() => setCurrent((prev) => (prev + 1) % testimonials.length)}
+          className="cursor-pointer"
+        >
+          <TestimonialCard
+            logo={t.logoUrl}
+            logoClass={t.logoClass}
+            quote={t.quote}
+            author={t.author}
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
