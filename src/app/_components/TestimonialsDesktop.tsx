@@ -20,7 +20,7 @@ const POSITIONS = [
 ];
 
 // How far each card travels vertically across the full section scroll
-const PARALLAX_Y = [-50, -80, -35, -65];
+const PARALLAX_Y = [-120, -190, -90, -155];
 
 function TestimonialCard({
   logo,
@@ -83,7 +83,7 @@ export default function TestimonialsDesktop({ testimonials }: { testimonials: Te
           trigger: section,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1.5,
+          scrub: 0.8,
         },
       });
       if (parallax.scrollTrigger) triggers.push(parallax.scrollTrigger);
