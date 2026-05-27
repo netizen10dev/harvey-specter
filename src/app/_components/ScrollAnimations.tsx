@@ -41,7 +41,7 @@ export default function ScrollAnimations() {
     });
 
     document.querySelectorAll<HTMLElement>("[data-animate-blur]").forEach((el) => {
-      gsap.set(el, { filter: "blur(16px)", opacity: 0.3 });
+      gsap.set(el, { filter: "blur(60px)", opacity: 0.3 });
       const tween = gsap.to(el, {
         filter: "blur(0px)",
         opacity: 1,
