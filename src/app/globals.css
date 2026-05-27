@@ -8,3 +8,7 @@
 [data-animate-focus-md] {
   opacity: 0;
 }
+
+[data-animate-blur] {
+  opacity: 0.3;
+}
