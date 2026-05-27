@@ -375,7 +375,7 @@ export default async function Home() {
 
       {/* Full-width photo */}
       <section data-dark-section className="relative w-full bg-white">
-        <div data-animate="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
+        <div data-animate-focus-md="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
             src="/photographer.jpg"
             alt=""
