@@ -138,12 +138,12 @@ export default async function Home() {
     : FB_POSTS;
 
   return (
-    <main className="relative w-full overflow-x-hidden bg-[#bfced1] font-[family-name:var(--font-inter)]">
+    <main className="relative w-full [overflow-x:clip] bg-[#bfced1] font-[family-name:var(--font-inter)]">
       <DesktopNav />
-      <HeroSection />
+      <div className="relative z-10"><HeroSection /></div>
 
       {/* Bio */}
-      <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[120px]">
+      <section className="relative z-10 w-full bg-white px-4 py-12 md:px-8 md:py-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
           <div data-animate="" className="flex w-full flex-col items-end gap-3">
             <p className="w-full pr-[10px] text-right font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-[#1f1f1f] md:pr-0">
@@ -191,7 +191,7 @@ export default async function Home() {
       </section>
 
       {/* About */}
-      <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
+      <section className="relative z-10 w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto w-full max-w-[1440px]">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:hidden">
@@ -242,7 +242,7 @@ export default async function Home() {
       </section>
 
       {/* Full-width photo */}
-      <section data-dark-section className="relative w-full bg-white">
+      <section data-dark-section className="relative z-10 w-full bg-white">
         <div data-animate-blur="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
             src="/photographer.jpg"
@@ -253,7 +253,7 @@ export default async function Home() {
       </section>
 
       {/* Services */}
-      <section data-dark-section className="relative w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
+      <section data-dark-section className="relative z-10 w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-12">
           <p data-animate="" className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
             [ services ]
@@ -279,7 +279,7 @@ export default async function Home() {
       </section>
 
       {/* Portfolio */}
-      <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
+      <section className="relative z-10 w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-[61px]">
           <div data-animate="" className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:hidden">
@@ -357,7 +357,7 @@ export default async function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
+      <section className="relative z-10 w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="relative mx-auto w-full max-w-[1440px]">
           <h2 data-animate="" className="text-center font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
             Testimonials
@@ -370,7 +370,7 @@ export default async function Home() {
       </section>
 
       {/* News */}
-      <section className="relative w-full bg-[#f3f3f3] px-4 py-16 md:px-8 md:py-[120px]">
+      <section className="relative z-10 w-full bg-[#f3f3f3] px-4 py-16 md:px-8 md:py-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
           <h2 data-animate="" className="pr-[150px] font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden md:pr-0">
             Keep up with my latest news &amp; achievements
@@ -407,7 +407,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer data-dark-section className="relative w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
+      <footer data-dark-section className="sticky bottom-0 z-0 w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 md:gap-[120px]">
           <div className="flex flex-col gap-6 md:gap-12">
             <div data-animate="" className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">

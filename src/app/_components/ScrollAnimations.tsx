@@ -41,15 +41,22 @@ export default function ScrollAnimations() {
     });
 
     document.querySelectorAll<HTMLElement>("[data-animate-blur]").forEach((el) => {
-      gsap.set(el, { filter: "blur(60px)", opacity: 0.3 });
-      const tween = gsap.to(el, {
-        filter: "blur(0px)",
-        opacity: 1,
-        delay: 2,
-        duration: 1,
-        ease: "power1.out",
-        scrollTrigger: { trigger: el, ...ST },
-      });
+      const tween = gsap.fromTo(
+        el,
+        { filter: "blur(40px)", opacity: 0.3, scale: 1.08 },
+        {
+          filter: "blur(0px)",
+          opacity: 1,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 90%",
+            end: "top 15%",
+            scrub: 1.2,
+          },
+        }
+      );
       if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     });
 

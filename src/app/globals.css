@@ -12,4 +12,6 @@
 
 [data-animate-blur] {
   opacity: 0.3;
+  filter: blur(40px);
+  scale: 1.08;
 }
