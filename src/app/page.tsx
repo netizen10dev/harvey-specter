@@ -5,6 +5,7 @@ import DesktopNav from "./_components/DesktopNav";
 import HeroSection from "./_components/HeroSection";
 import MobileTestimonialSlider from "./_components/MobileTestimonialSlider";
 import MobileNewsSlider from "./_components/MobileNewsSlider";
+import ScrollAnimations from "./_components/ScrollAnimations";
 
 export const dynamic = 'force-dynamic';
 
@@ -276,14 +277,14 @@ export default async function Home() {
       {/* Bio */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
-          <div className="flex w-full flex-col items-end gap-3">
+          <div data-animate="" className="flex w-full flex-col items-end gap-3">
             <p className="w-full pr-[10px] text-right font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-[#1f1f1f] md:pr-0">
               [ 8+ years in industry ]
             </p>
             <div className="h-px w-full bg-black" />
           </div>
 
-          <div className="mt-[20px] flex w-full flex-col items-center gap-3 font-light uppercase tracking-[-0.08em] leading-[0.84] text-[32px] text-black md:mt-0 md:items-start md:gap-2 md:text-[clamp(48px,6.667vw,96px)]">
+          <div data-animate-stagger-x="" className="mt-[20px] flex w-full flex-col items-center gap-3 font-light uppercase tracking-[-0.08em] leading-[0.84] text-[32px] text-black md:mt-0 md:items-start md:gap-2 md:text-[clamp(48px,6.667vw,96px)]">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal normal-case tracking-normal leading-[1.1] text-[#1f1f1f] md:hidden">
               001
             </p>
@@ -324,7 +325,7 @@ export default async function Home() {
       {/* About */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
+          <div data-animate="" className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:hidden">
               002
             </p>
@@ -374,7 +375,7 @@ export default async function Home() {
 
       {/* Full-width photo */}
       <section data-dark-section className="relative w-full bg-white">
-        <div className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
+        <div data-animate="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
             src="/photographer.jpg"
             alt=""
@@ -386,16 +387,16 @@ export default async function Home() {
       {/* Services */}
       <section data-dark-section className="relative w-full bg-black px-4 py-12 text-white md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-12">
-          <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
+          <p data-animate="" className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
             [ services ]
           </p>
 
-          <div className="flex w-full items-center justify-between whitespace-nowrap font-light uppercase tracking-[-0.08em] leading-none text-[32px] md:text-[clamp(48px,6.667vw,96px)]">
+          <div data-animate="" className="flex w-full items-center justify-between whitespace-nowrap font-light uppercase tracking-[-0.08em] leading-none text-[32px] md:text-[clamp(48px,6.667vw,96px)]">
             <span>[{services.length}]</span>
             <span>Deliverables</span>
           </div>
 
-          <div className="flex flex-col gap-12">
+          <div data-animate-stagger="" className="flex flex-col gap-12">
             {services.map((item, i) => (
               <div key={item._id} className="flex flex-col gap-3">
                 <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-white">
@@ -430,7 +431,7 @@ export default async function Home() {
       {/* Portfolio */}
       <section className="relative w-full bg-white px-4 py-12 md:px-8 md:py-[80px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-[61px]">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div data-animate="" className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:hidden">
               [ portfolio ]
             </p>
@@ -456,7 +457,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-end">
-            <div className="flex flex-col gap-6">
+            <div data-animate="" className="flex flex-col gap-6">
               {projects[0] && (
                 <PortfolioTile
                   title={projects[0].title}
@@ -478,7 +479,7 @@ export default async function Home() {
                 <PortfolioCTA />
               </div>
             </div>
-            <div className="flex flex-col gap-6 md:pt-[240px]">
+            <div data-animate="" className="flex flex-col gap-6 md:pt-[240px]">
               {projects[2] && (
                 <PortfolioTile
                   title={projects[2].title}
@@ -508,7 +509,7 @@ export default async function Home() {
       {/* Testimonials */}
       <section className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="relative mx-auto w-full max-w-[1440px]">
-          <h2 className="text-center font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
+          <h2 data-animate="" className="text-center font-bold capitalize tracking-[-0.07em] text-black text-[64px] leading-[0.9] md:hidden">
             Testimonials
           </h2>
 
@@ -516,7 +517,7 @@ export default async function Home() {
 
           {/* Desktop absolute layout */}
           <div className="hidden md:block">
-            <div className="relative isolate mx-auto w-[1238px] max-w-full">
+            <div data-animate-stagger="" className="relative isolate mx-auto w-[1238px] max-w-full">
               <h2
                 className="pointer-events-none absolute left-0 right-0 z-0 text-center font-medium capitalize tracking-[-0.07em] text-black md:text-[clamp(80px,13.75vw,198px)] md:leading-[1.1]"
                 style={{ top: "375px", transform: "translateY(-50%)" }}
@@ -555,12 +556,12 @@ export default async function Home() {
       {/* News */}
       <section className="relative w-full bg-[#f3f3f3] px-4 py-16 md:px-8 md:py-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <h2 className="pr-[150px] font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden md:pr-0">
+          <h2 data-animate="" className="pr-[150px] font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[32px] md:hidden md:pr-0">
             Keep up with my latest news &amp; achievements
           </h2>
 
           <div className="mt-8 flex flex-col md:mt-0 md:flex-row md:items-end md:gap-8">
-            <div className="hidden h-[706px] w-[110px] shrink-0 items-center justify-center md:flex">
+            <div data-animate="" className="hidden h-[706px] w-[110px] shrink-0 items-center justify-center md:flex">
               <div
                 className="flex flex-col whitespace-nowrap font-light uppercase tracking-[-0.08em] leading-[0.86] text-black text-[64px]"
                 style={{ transform: "rotate(-90deg)" }}
@@ -570,7 +571,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="hidden gap-4 md:ml-[270px] md:flex md:w-[1020px] md:items-start md:gap-[31px]">
+            <div data-animate="" className="hidden gap-4 md:ml-[270px] md:flex md:w-[1020px] md:items-start md:gap-[31px]">
               {posts.flatMap((post, i) => [
                 i > 0 && (
                   <div key={`divider-${post._id}`} className="hidden w-px self-stretch bg-black/30 md:block" />
@@ -592,7 +593,7 @@ export default async function Home() {
       <footer data-dark-section className="relative w-full overflow-hidden bg-black px-4 pt-12 text-white md:px-8">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 md:gap-[120px]">
           <div className="flex flex-col gap-6 md:gap-12">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">
+            <div data-animate="" className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">
               <div className="flex w-[298px] flex-col items-start gap-3">
                 <p className="text-[24px] font-light italic uppercase tracking-[-0.04em] leading-[1.1] text-white">
                   Have a{" "}
@@ -615,7 +616,7 @@ export default async function Home() {
             <div className="h-px w-full bg-white" />
           </div>
 
-          <div className="hidden md:flex md:items-end md:justify-between">
+          <div data-animate="" className="hidden md:flex md:items-end md:justify-between">
             <div className="relative h-[219px] w-[1093px] overflow-hidden">
               <div
                 className="absolute left-0 top-1/2 flex h-[160px] w-[15px] -translate-y-1/2 items-center justify-center"
@@ -637,7 +638,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-4 md:hidden">
+          <div data-animate="" className="flex flex-col items-center gap-4 md:hidden">
             <div className="flex gap-[34px] pb-8 text-[12px] font-normal uppercase leading-[1.1] tracking-[-0.04em] text-white">
               <a href="#" className="underline">licences</a>
               <a href="#" className="underline">Privacy policy</a>
@@ -655,6 +656,7 @@ export default async function Home() {
       </footer>
 
       <MobileNav />
+      <ScrollAnimations />
     </main>
   );
 }
