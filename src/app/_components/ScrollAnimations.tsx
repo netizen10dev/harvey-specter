@@ -40,6 +40,17 @@ export default function ScrollAnimations() {
       if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     });
 
+    document.querySelectorAll<HTMLElement>("[data-animate-blur]").forEach((el) => {
+      gsap.set(el, { filter: "blur(16px)" });
+      const tween = gsap.to(el, {
+        filter: "blur(0px)",
+        duration: 2,
+        ease: "power2.out",
+        scrollTrigger: { trigger: el, ...ST },
+      });
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
+
     const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     document.querySelectorAll<HTMLElement>("[data-animate-focus-md]").forEach((el) => {
       if (isDesktop) {
