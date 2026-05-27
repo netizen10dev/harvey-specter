@@ -46,7 +46,7 @@ export default function ScrollAnimations() {
         filter: "blur(0px)",
         opacity: 1,
         delay: 2,
-        duration: 3,
+        duration: 2,
         ease: "power1.out",
         scrollTrigger: { trigger: el, ...ST },
       });
