@@ -98,46 +98,48 @@ export default async function ServicesPage() {
       </section>
 
       {/* Services list */}
-      <section className="relative z-10 w-full bg-white px-4 pb-16 md:px-8 md:pb-[120px]">
+      <section className="relative z-10 w-full bg-white pb-16 md:pb-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <p data-animate="" className="mb-12 font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f]">
+          <p data-animate="" className="mb-12 px-4 font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f] md:px-8">
             [ What we do ]
           </p>
 
-          <div className="flex flex-col gap-20 md:gap-28">
-            {services.map((service, i) => (
-              <div key={service._id} data-animate="" className="flex flex-col gap-6">
-                {/* Number + divider */}
-                <div className="flex items-center gap-4">
-                  <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f]">
-                    [ 0{i + 1} ]
-                  </p>
-                  <div className="h-px flex-1 bg-black" />
-                </div>
-
-                {/* Title + content row */}
-                <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-12">
-                  <h2 className="font-bold italic uppercase tracking-[-0.04em] leading-[1.0] text-black text-[clamp(36px,5.5vw,80px)] md:w-[45%]">
-                    {service.title}
-                  </h2>
-
-                  <div className="flex flex-col gap-6 md:w-[50%] md:flex-row md:items-start md:gap-8">
-                    <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f] md:flex-1">
+          <div className="flex flex-col">
+            {services.map((service, i) => {
+              const flip = i % 2 === 1;
+              return (
+                <div
+                  key={service._id}
+                  data-animate=""
+                  className={`flex flex-col border-t border-black/10 md:min-h-[500px] md:flex-row${flip ? " md:flex-row-reverse" : ""}`}
+                >
+                  {/* Text */}
+                  <div className="flex flex-col justify-center gap-6 px-4 py-12 md:w-1/2 md:px-16 md:py-20">
+                    <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f]/40">
+                      [ 0{i + 1} ]
+                    </p>
+                    <h2 className="font-bold italic uppercase tracking-[-0.04em] leading-[1.0] text-black text-[clamp(32px,4vw,64px)]">
+                      {service.title}
+                    </h2>
+                    <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f] md:max-w-[400px]">
                       {service.description}
                     </p>
-                    {service.imageUrl && (
-                      <div className="h-[220px] w-full overflow-hidden md:h-[180px] md:w-[180px] md:shrink-0">
-                        <img
-                          src={service.imageUrl}
-                          alt=""
-                          className="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                    )}
                   </div>
+
+                  {/* Image */}
+                  {service.imageUrl && (
+                    <div className="h-[280px] overflow-hidden md:h-auto md:w-1/2">
+                      <img
+                        src={service.imageUrl}
+                        alt=""
+                        className="h-full w-full object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.04]"
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
+            <div className="border-t border-black/10" />
           </div>
         </div>
       </section>

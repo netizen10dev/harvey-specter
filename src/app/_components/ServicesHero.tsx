@@ -12,11 +12,11 @@ export default function ServicesHero() {
     const root = wrapperRef.current;
     if (!root) return;
 
-    const bg     = root.querySelector<HTMLElement>("[data-svc-bg]");
     const splitL = root.querySelector<HTMLElement>("[data-svc-split-l]");
     const splitR = root.querySelector<HTMLElement>("[data-svc-split-r]");
     const lines  = root.querySelectorAll<HTMLElement>("[data-svc-line]");
     const label  = root.querySelector<HTMLElement>("[data-svc-label]");
+    const bg     = root.querySelector<HTMLElement>("[data-svc-bg]");
 
     // Entrance: staggered slide-up
     gsap.set([label, ...Array.from(lines)], { opacity: 0, y: 70 });
@@ -29,64 +29,63 @@ export default function ServicesHero() {
       delay: 0.2,
     });
 
-    // Scroll parallax: bg zooms, text splits
-    const triggers: ScrollTrigger[] = [];
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: root,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.5,
-      },
+    // Scroll parallax: matched to homepage HeroParallax
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+      tl.to(bg,     { scale: 1.18, ease: "none" }, 0)
+        .to(splitL, { x: "-45vw",  ease: "none" }, 0)
+        .to(splitR, { x: "45vw",   ease: "none" }, 0);
     });
 
-    tl.to(bg,     { scale: 1.18, ease: "none" }, 0)
-      .to(splitL, { x: "-30vw",  ease: "none" }, 0)
-      .to(splitR, { x: "30vw",   ease: "none" }, 0);
+    mm.add("(max-width: 767px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+      tl.to(bg,     { scale: 1.18, ease: "none" }, 0)
+        .to(splitL, { x: "-32vw",  ease: "none" }, 0)
+        .to(splitR, { x: "32vw",   ease: "none" }, 0);
+    });
 
-    if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
-    return () => triggers.forEach((t) => t.kill());
+    return () => mm.revert();
   }, []);
 
   return (
     <div
       ref={wrapperRef}
-      data-dark-section
-      className="relative min-h-screen w-full overflow-hidden bg-black"
+      className="relative min-h-screen w-full overflow-hidden bg-white"
     >
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0">
-        <img
-          data-svc-bg=""
-          src="/harvey-hero.jpg"
-          alt=""
-          className="h-full w-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
-
-      {/* Bottom blur fade */}
+      {/* Scalable bg layer */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-[200px] backdrop-blur-[16px] md:h-[310px] md:backdrop-blur-[20px]"
-        style={{
-          maskImage: "linear-gradient(to bottom, transparent, black)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent, black)",
-        }}
+        data-svc-bg=""
+        className="pointer-events-none absolute inset-0 origin-center bg-[#f0f0f0]"
       />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col justify-end px-4 pb-12 md:px-8 md:pb-[100px]">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 text-center md:px-8">
         <p
           data-svc-label=""
-          className="mb-4 font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-white/70"
+          className="mb-4 font-[family-name:var(--font-geist-mono)] text-sm uppercase leading-[1.1] text-black/50"
         >
           [ Creative Studio ]
         </p>
-        <h1 className="font-medium capitalize tracking-[-0.07em] leading-[0.88] text-white text-[clamp(56px,10vw,148px)]">
+        <h1 className="font-medium capitalize tracking-[-0.07em] leading-[0.88] text-black text-[clamp(56px,10vw,148px)]">
           <span data-svc-line="" data-svc-split-l="" className="block">Turning</span>
-          <span data-svc-line="" className="block pl-[clamp(40px,8vw,120px)]">ideas into</span>
-          <span data-svc-line="" data-svc-split-r="" className="block pl-[clamp(80px,16vw,240px)]">impact.</span>
+          <span data-svc-line="" className="block">ideas into</span>
+          <span data-svc-line="" data-svc-split-r="" className="block">impact.</span>
         </h1>
       </div>
     </div>
