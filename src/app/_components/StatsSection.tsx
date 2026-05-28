@@ -4,14 +4,21 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const STATS = [
-  { value: 8,   suffix: "+", label: "Years in industry"   },
-  { value: 120, suffix: "+", label: "Projects completed"  },
-  { value: 45,  suffix: "",  label: "Happy clients"       },
-  { value: 12,  suffix: "",  label: "Awards won"          },
-];
+type StatValues = {
+  yearsExperience?: number;
+  projectsCompleted?: number;
+  clientsServed?: number;
+  awardsWon?: number;
+};
 
-export default function StatsSection() {
+export default function StatsSection({ values }: { values?: StatValues }) {
+  const STATS = [
+    { value: values?.yearsExperience  ?? 8,   suffix: "+", label: "Years in industry"  },
+    { value: values?.projectsCompleted ?? 120, suffix: "+", label: "Projects completed" },
+    { value: values?.clientsServed     ?? 45,  suffix: "",  label: "Happy clients"      },
+    { value: values?.awardsWon         ?? 12,  suffix: "",  label: "Awards won"         },
+  ];
+
   const sectionRef = useRef<HTMLElement>(null);
   const valueRefs  = useRef<(HTMLSpanElement | null)[]>([]);
 

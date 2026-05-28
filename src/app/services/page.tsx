@@ -9,13 +9,33 @@ import MagneticButton from "../_components/MagneticButton";
 import FooterSocialLinks from "../_components/FooterSocialLinks";
 import ScrollAnimations from "../_components/ScrollAnimations";
 
-export const dynamic = "force-dynamic";
-
-const SERVICES_QUERY = `*[_type == "service"] | order(order asc) { _id, title, description, image }`;
+const SERVICES_PAGE_QUERY = `*[_type == "servicesPage" && _id == "servicesPage"][0]{
+  introQuote,
+  services[]{ title, description, image },
+  processSteps[]{ title, description },
+  photographerImage
+}`;
+const ABOUT_QUERY = `*[_type == "about" && _id == "about"][0]{
+  yearsExperience,
+  projectsCompleted,
+  clientsServed,
+  awardsWon
+}`;
 
 type SanityImage = { asset?: { _ref?: string; _type?: string } };
-type SanityService = { _id: string; title?: string; description?: string; image?: SanityImage };
 type ServiceItem = { _id: string; title: string; description: string; imageUrl: string };
+type SanityServicesPage = {
+  introQuote?: string;
+  services?: { title?: string; description?: string; image?: SanityImage }[];
+  processSteps?: { title?: string; description?: string }[];
+  photographerImage?: SanityImage;
+};
+type SanityAbout = {
+  yearsExperience?: number;
+  projectsCompleted?: number;
+  clientsServed?: number;
+  awardsWon?: number;
+};
 
 const FB_SERVICES: ServiceItem[] = [
   { _id: "s1", title: "Brand Discovery", description: "We dig into your market, competitors, and audience to surface the positioning that makes you genuinely different — not just visually, but strategically. Every brand decision that follows is grounded in what we learn here.", imageUrl: "/service-brand.jpg" },
@@ -32,11 +52,29 @@ const PROCESS = [
 ];
 
 export default async function ServicesPage() {
-  const { data: rawServices } = (await sanityFetch({ query: SERVICES_QUERY })) as { data: SanityService[] };
+  const [{ data: rawPage }, { data: rawAbout }] = (await Promise.all([
+    sanityFetch({ query: SERVICES_PAGE_QUERY }),
+    sanityFetch({ query: ABOUT_QUERY }),
+  ])) as [{ data: SanityServicesPage | null }, { data: SanityAbout | null }];
 
-  const services: ServiceItem[] = rawServices?.length
-    ? rawServices.map((s) => ({
-        _id: s._id,
+  const introQuote = rawPage?.introQuote ?? "Every brief is a chance to build something that outlasts the project.";
+
+  const photographerUrl = rawPage?.photographerImage
+    ? urlFor(rawPage.photographerImage).width(2400).url()
+    : "/photographer.jpg";
+
+  const processSteps = rawPage?.processSteps?.length
+    ? rawPage.processSteps.map((s, i) => ({
+        num: String(i + 1).padStart(2, "0"),
+        title: s.title ?? "",
+        description: s.description ?? "",
+      }))
+    : PROCESS;
+
+  const rawServicesList = rawPage?.services ?? [];
+  const services: ServiceItem[] = rawServicesList.length
+    ? rawServicesList.map((s, i) => ({
+        _id: String(i),
         title: s.title ?? "",
         description: s.description ?? "",
         imageUrl: s.image ? urlFor(s.image).width(744).height(744).url() : "",
@@ -55,7 +93,7 @@ export default async function ServicesPage() {
       {/* Intro quote */}
       <section className="relative z-10 w-full bg-white px-4 py-16 md:px-8 md:py-[120px]">
         <div className="mx-auto w-full max-w-[1440px]">
-          <TextFillScroll text="Every brief is a chance to build something that outlasts the project." />
+          <TextFillScroll text={introQuote} />
         </div>
       </section>
 
@@ -108,7 +146,7 @@ export default async function ServicesPage() {
       <section data-dark-section className="relative z-10 w-full bg-white">
         <div data-animate-blur="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
-            src="/photographer.jpg"
+            src={photographerUrl}
             alt=""
             className="h-full w-full object-cover object-center"
           />
@@ -123,7 +161,7 @@ export default async function ServicesPage() {
           </p>
 
           <div data-animate-stagger="" className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
-            {PROCESS.map((step) => (
+            {processSteps.map((step) => (
               <div key={step.num} className="flex flex-col gap-4">
                 <p className="font-[family-name:var(--font-geist-mono)] text-sm font-normal uppercase leading-[1.1] text-[#1f1f1f]">
                   [ {step.num} ]
@@ -142,7 +180,12 @@ export default async function ServicesPage() {
       </section>
 
       {/* Stats */}
-      <StatsSection />
+      <StatsSection values={{
+        yearsExperience:   rawAbout?.yearsExperience,
+        projectsCompleted: rawAbout?.projectsCompleted,
+        clientsServed:     rawAbout?.clientsServed,
+        awardsWon:         rawAbout?.awardsWon,
+      }} />
 
       {/* CTA */}
       <section className="relative z-10 w-full bg-white px-4 py-16 md:px-8 md:py-[120px]">

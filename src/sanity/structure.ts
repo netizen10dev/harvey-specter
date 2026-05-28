@@ -4,11 +4,15 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('H.Studio')
     .items([
-      S.documentTypeListItem('service').title('Services'),
-      S.documentTypeListItem('portfolioProject').title('Portfolio Projects'),
-      S.documentTypeListItem('testimonial').title('Testimonials'),
+      S.listItem()
+        .title('Homepage')
+        .child(S.document().schemaType('homepage').documentId('homepage').title('Homepage')),
+      S.listItem()
+        .title('About Page')
+        .child(S.document().schemaType('about').documentId('about').title('About Page')),
+      S.listItem()
+        .title('Services Page')
+        .child(S.document().schemaType('servicesPage').documentId('servicesPage').title('Services Page')),
       S.divider(),
-      S.documentTypeListItem('post').title('News Posts'),
-      S.documentTypeListItem('category').title('Categories'),
-      S.documentTypeListItem('author').title('Authors'),
+      S.documentTypeListItem('portfolioProject').title('Portfolio Projects'),
     ])

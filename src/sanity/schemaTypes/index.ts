@@ -1,21 +1,15 @@
 import { type SchemaTypeDefinition } from 'sanity'
 
-import {blockContentType} from './blockContentType'
-import {categoryType} from './categoryType'
-import {postType} from './postType'
-import {authorType} from './authorType'
 import {portfolioProjectType} from './portfolioProjectType'
-import {testimonialType} from './testimonialType'
-import {serviceType} from './serviceType'
+import {homepageType}         from './homepageType'
+import {aboutType}            from './aboutType'
+import {servicesPageType}     from './servicesPageType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    blockContentType,
-    categoryType,
-    postType,
-    authorType,
     portfolioProjectType,
-    testimonialType,
-    serviceType,
+    homepageType,
+    aboutType,
+    servicesPageType,
   ],
 }

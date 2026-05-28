@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
 const pillClass = "rounded-3xl px-2 py-1 text-[14px] font-medium tracking-[-0.04em] text-[#111] backdrop-blur-[10px]";
@@ -12,12 +13,14 @@ export default function PortfolioTile({
   tags,
   heightClass,
   className = "",
+  href,
 }: {
   title: string;
   image: string;
   tags: string[];
   heightClass: string;
   className?: string;
+  href?: string;
 }) {
   const imgRef = useRef<HTMLImageElement>(null);
   const arrowRef = useRef<SVGSVGElement>(null);
@@ -34,12 +37,20 @@ export default function PortfolioTile({
     gsap.to(arrowRef.current, { x: 0, y: 0, duration: 0.3, ease: "power2.inOut" });
   }
 
+  const Wrapper = href
+    ? ({ children }: { children: React.ReactNode }) => (
+        <Link href={href} className={`flex flex-col gap-2.5 ${className}`} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+          {children}
+        </Link>
+      )
+    : ({ children }: { children: React.ReactNode }) => (
+        <div className={`flex flex-col gap-2.5 ${className}`} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+          {children}
+        </div>
+      );
+
   return (
-    <div
-      className={`flex flex-col gap-2.5 ${className}`}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
+    <Wrapper>
       <div
         className={`relative flex flex-col items-start justify-end overflow-hidden pb-4 pl-4 ${heightClass}`}
       >
@@ -76,6 +87,6 @@ export default function PortfolioTile({
           <path d="M7 17L17 7 M9 7H17V15" />
         </svg>
       </div>
-    </div>
+    </Wrapper>
   );
 }

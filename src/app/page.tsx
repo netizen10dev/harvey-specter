@@ -12,22 +12,22 @@ import NewsCard from "./_components/NewsCard";
 import FooterSocialLinks from "./_components/FooterSocialLinks";
 import ScrollAnimations from "./_components/ScrollAnimations";
 
-export const dynamic = 'force-dynamic';
-
 // GROQ queries
-const SERVICES_QUERY = `*[_type == "service"] | order(order asc) { _id, title, description, image }`;
-const PROJECTS_QUERY = `*[_type == "portfolioProject"] | order(order asc)[0...4] { _id, title, image, tags }`;
+const HOMEPAGE_QUERY   = `*[_type == "homepage" && _id == "homepage"][0]{ aboutParagraph, portrait, photographerImage }`;
+const SERVICES_QUERY   = `*[_type == "servicesPage" && _id == "servicesPage"][0]{ services[]{ title, description, image } }`;
+const PROJECTS_QUERY   = `*[_type == "portfolioProject"] | order(order asc)[0...4] { _id, title, image, tags, "slug": slug.current }`;
 const TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(order asc)[0...4] { _id, author, quote, logo }`;
-const POSTS_QUERY = `*[_type == "post"] | order(publishedAt desc)[0...3] { _id, title, excerpt, mainImage }`;
+const POSTS_QUERY      = `*[_type == "post"] | order(publishedAt desc)[0...3] { _id, title, excerpt, mainImage }`;
 
 // Normalized types
 type ServiceItem = { _id: string; title: string; description: string; imageUrl: string };
-type ProjectItem = { _id: string; title: string; imageUrl: string; tags: string[] };
+type ProjectItem = { _id: string; title: string; imageUrl: string; tags: string[]; slug?: string };
 type TestimonialItem = { _id: string; author: string; quote: string; logoUrl: string; logoClass: string };
 type PostItem = { _id: string; imageUrl: string; excerpt: string };
 type SanityImage = { asset?: { _ref?: string; _type?: string } };
-type SanityService = { _id: string; title?: string; description?: string; image?: SanityImage };
-type SanityProject = { _id: string; title?: string; image?: SanityImage; tags?: string[] };
+type SanityHomepage = { aboutParagraph?: string; portrait?: SanityImage; photographerImage?: SanityImage };
+type SanityServicesPage = { services?: { title?: string; description?: string; image?: SanityImage }[] };
+type SanityProject = { _id: string; title?: string; image?: SanityImage; tags?: string[]; slug?: string };
 type SanityTestimonial = { _id: string; author?: string; quote?: string; logo?: SanityImage };
 type SanityPost = { _id: string; mainImage?: SanityImage; excerpt?: string };
 
@@ -88,24 +88,31 @@ function PortfolioCTA() {
 
 
 export default async function Home() {
-  const [{ data: rawServices }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = (await Promise.all([
+  const [{ data: rawHomepage }, { data: rawServicesPage }, { data: rawProjects }, { data: rawTestimonials }, { data: rawPosts }] = (await Promise.all([
+    sanityFetch({ query: HOMEPAGE_QUERY }),
     sanityFetch({ query: SERVICES_QUERY }),
     sanityFetch({ query: PROJECTS_QUERY }),
     sanityFetch({ query: TESTIMONIALS_QUERY }),
     sanityFetch({ query: POSTS_QUERY }),
   ])) as [
-    { data: SanityService[] },
+    { data: SanityHomepage | null },
+    { data: SanityServicesPage | null },
     { data: SanityProject[] },
     { data: SanityTestimonial[] },
     { data: SanityPost[] },
   ];
 
+  const homeAboutParagraph = rawHomepage?.aboutParagraph ?? "Placeholder paragraph one. This is where you introduce yourself — your background, your passion for your craft, and what drives you creatively. Two to three sentences work best here. Placeholder paragraph two. Here you can describe your technical approach, how you collaborate with clients, or what sets your work apart from others in your field.";
+  const portraitUrl        = rawHomepage?.portrait         ? urlFor(rawHomepage.portrait).width(872).height(1228).url()     : "/about-portrait.jpg";
+  const photographerUrl    = rawHomepage?.photographerImage ? urlFor(rawHomepage.photographerImage).width(2400).url()       : "/photographer.jpg";
+
   // Normalize Sanity data or fall back to hardcoded content
-  const services: ServiceItem[] = rawServices?.length
-    ? rawServices.map((s) => ({
-        _id: s._id,
+  const rawServicesList = rawServicesPage?.services ?? [];
+  const services: ServiceItem[] = rawServicesList.length
+    ? rawServicesList.map((s, i) => ({
+        _id: String(i),
         title: s.title ?? "",
-        description: s.description ?? "Placeholder description of this service.",
+        description: s.description ?? "",
         imageUrl: s.image ? urlFor(s.image).width(302).height(302).url() : "",
       }))
     : FB_SERVICES;
@@ -117,6 +124,7 @@ export default async function Home() {
         title: p.title ?? "",
         imageUrl: p.image ? urlFor(p.image).width(744).height(744).url() : (STATIC_PROJECT_IMAGES[i] ?? ""),
         tags: p.tags ?? [],
+        slug: p.slug,
       }))
     : FB_PROJECTS;
 
@@ -210,13 +218,7 @@ export default async function Home() {
                 </div>
                 <div className="flex flex-1 items-center py-3">
                   <p className="font-[family-name:var(--font-inter)] text-[14px] font-normal leading-[1.3] tracking-[-0.04em] text-[#1f1f1f]">
-                    Placeholder paragraph one. This is where you introduce
-                    yourself &mdash; your background, your passion for your
-                    craft, and what drives you creatively. Two to three
-                    sentences work best here. Placeholder paragraph two. Here
-                    you can describe your technical approach, how you
-                    collaborate with clients, or what sets your work apart from
-                    others in your field.
+                    {homeAboutParagraph}
                   </p>
                 </div>
                 <div className="flex w-6 flex-col items-end justify-between">
@@ -231,7 +233,7 @@ export default async function Home() {
                 </p>
                 <div data-animate-focus-md="" className="aspect-[422/594] w-full overflow-hidden md:h-[614px] md:w-[436px] md:aspect-auto">
                   <img
-                    src="/about-portrait.jpg"
+                    src={portraitUrl}
                     alt=""
                     className="h-full w-full object-cover object-center"
                   />
@@ -246,7 +248,7 @@ export default async function Home() {
       <section data-dark-section className="relative z-10 w-full bg-white">
         <div data-animate-blur="" className="aspect-[375/614] w-full overflow-hidden md:aspect-[1226/767]">
           <img
-            src="/photographer.jpg"
+            src={photographerUrl}
             alt=""
             className="h-full w-full object-cover object-center"
           />
@@ -316,6 +318,7 @@ export default async function Home() {
                   tags={projects[0].tags}
                   heightClass="h-[390px] md:h-[744px]"
                   className="md:mb-[50px]"
+                  href={projects[0].slug ? `/projects/${projects[0].slug}` : undefined}
                 />
               )}
               {projects[1] && (
@@ -324,6 +327,7 @@ export default async function Home() {
                   image={projects[1].imageUrl}
                   tags={projects[1].tags}
                   heightClass="h-[390px] md:h-[699px]"
+                  href={projects[1].slug ? `/projects/${projects[1].slug}` : undefined}
                 />
               )}
               <div className="hidden md:mt-[50px] md:block">
@@ -338,6 +342,7 @@ export default async function Home() {
                   tags={projects[2].tags}
                   heightClass="h-[390px] md:h-[699px]"
                   className="md:mb-[50px]"
+                  href={projects[2].slug ? `/projects/${projects[2].slug}` : undefined}
                 />
               )}
               {projects[3] && (
@@ -346,6 +351,7 @@ export default async function Home() {
                   image={projects[3].imageUrl}
                   tags={projects[3].tags}
                   heightClass="h-[390px] md:h-[744px]"
+                  href={projects[3].slug ? `/projects/${projects[3].slug}` : undefined}
                 />
               )}
             </div>
