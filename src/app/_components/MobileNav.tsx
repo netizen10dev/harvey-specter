@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { useModal } from "@/app/_context/ModalContext";
 
 const navLinks = [
-  { label: "About",    href: "/about" },
+  { label: "About",    href: "/about"    },
   { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
-  { label: "News",     href: null     },
-  { label: "Contact",  href: null     },
+  { label: "News",     href: "/news"     },
+  { label: "Contact",  href: "/contact"  },
 ];
 
 // ---- Desktop nav link with GSAP underline hover ----
@@ -55,6 +56,7 @@ export function NavLink({ label }: { label: string }) {
 export function NavButton({ label, className = "" }: { label: string; className?: string }) {
   const fillRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
+  const { openModal } = useModal();
 
   function onEnter() {
     gsap.killTweensOf([fillRef.current, textRef.current]);
@@ -80,6 +82,7 @@ export function NavButton({ label, className = "" }: { label: string; className?
   return (
     <button
       type="button"
+      onClick={openModal}
       className={`relative overflow-hidden rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em] ${className}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -99,6 +102,7 @@ export function NavButton({ label, className = "" }: { label: string; className?
 // ---- Mobile nav ----
 export default function MobileNav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { openModal } = useModal();
   const overlayRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const ctaRef = useRef<HTMLButtonElement>(null);
@@ -227,6 +231,7 @@ export default function MobileNav() {
         <button
           ref={ctaRef}
           type="button"
+          onClick={() => { setMenuOpen(false); openModal(); }}
           className="relative mt-12 overflow-hidden rounded-3xl bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em]"
           onMouseEnter={onCtaEnter}
           onMouseLeave={onCtaLeave}

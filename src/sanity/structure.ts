@@ -13,6 +13,15 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title('Services Page')
         .child(S.document().schemaType('servicesPage').documentId('servicesPage').title('Services Page')),
+      S.listItem()
+        .title('News Page')
+        .child(S.document().schemaType('newsPage').documentId('newsPage').title('News Page')),
+      S.listItem()
+        .title('Contact Page')
+        .child(S.document().schemaType('contactPage').documentId('contactPage').title('Contact Page')),
       S.divider(),
       S.documentTypeListItem('portfolioProject').title('Portfolio Projects'),
+      S.documentTypeListItem('post').title('News Posts'),
+      S.divider(),
+      S.documentTypeListItem('contactSubmission').title('Contact Submissions'),
     ])

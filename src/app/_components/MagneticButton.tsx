@@ -2,9 +2,11 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
+import { useModal } from "@/app/_context/ModalContext";
 
 export default function MagneticButton({ label }: { label: string }) {
   const btnRef = useRef<HTMLButtonElement>(null);
+  const { openModal } = useModal();
 
   function onMove(e: React.MouseEvent<HTMLButtonElement>) {
     const btn = btnRef.current;
@@ -23,6 +25,7 @@ export default function MagneticButton({ label }: { label: string }) {
     <button
       ref={btnRef}
       type="button"
+      onClick={openModal}
       className="inline-flex items-center justify-center rounded-full bg-black px-10 py-5 text-base font-medium tracking-[-0.04em] text-white"
       onMouseMove={onMove}
       onMouseLeave={onLeave}

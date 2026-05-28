@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 import { Playfair_Display } from "next/font/google";
 import { SanityLive } from "@/sanity/lib/live";
+import { ModalProvider } from "@/app/_context/ModalContext";
+import ContactModal from "@/app/_components/ContactModal";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,7 +37,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${geistMono.variable} ${playfair.variable}`}>
       <body>
-        {children}
+        <ModalProvider>
+          {children}
+          <ContactModal />
+        </ModalProvider>
         <SanityLive />
       </body>
     </html>

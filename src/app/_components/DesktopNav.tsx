@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { useModal } from "@/app/_context/ModalContext";
 
 const navLinks = [
-  { label: "About",    href: "/about" },
+  { label: "About",    href: "/about"    },
   { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
-  { label: "News",     href: null     },
-  { label: "Contact",  href: null     },
+  { label: "News",     href: "/news"     },
+  { label: "Contact",  href: "/contact"  },
 ];
 
 export default function DesktopNav() {
@@ -17,6 +18,7 @@ export default function DesktopNav() {
   const underlinesRef = useRef<(HTMLSpanElement | null)[]>(Array(navLinks.length).fill(null));
   const ctaFillRef = useRef<HTMLSpanElement>(null);
   const ctaTextRef = useRef<HTMLSpanElement>(null);
+  const { openModal } = useModal();
 
   useEffect(() => {
     const nav = navRef.current;
@@ -151,6 +153,7 @@ export default function DesktopNav() {
         <button
           type="button"
           data-nav-cta
+          onClick={openModal}
           className="relative overflow-hidden rounded-3xl border border-solid border-transparent bg-black px-4 py-3 text-sm font-medium tracking-[-0.04em]"
           onMouseEnter={onCtaEnter}
           onMouseLeave={onCtaLeave}
